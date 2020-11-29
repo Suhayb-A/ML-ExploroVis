@@ -1,0 +1,13 @@
+**/node_modules
+**/build
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.eslintcache
+yarn-error.log
+**/__pycache__
+.eslintcache
+**.spec
+**.log
