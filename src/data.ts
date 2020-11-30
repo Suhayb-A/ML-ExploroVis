@@ -8,7 +8,6 @@ if (!remote.require("electron-is-dev"))
 
 const DIR = path.join(resources_path, "python", "data/");
 const fs = window.require("electron").remote.require("fs");
-console.log(DIR);
 
 export interface DataSet {
   title: string;

@@ -1,5 +1,5 @@
 import React from "react";
-import { DataSet } from "../data";
+import Scatter from './Scatter';
 
 interface Props {
   items: any[];
@@ -31,22 +31,13 @@ ScrollView.defaultProps = {
   selectedIDX: -1,
 };
 
-function DefaultThumbnail(props: { item: any }) {
-  //TODO: implement
-  return (
-    <>
-      <div></div>
-    </>
-  );
-}
-
 function BoxView(props: {
   item: any;
   Thumbnail?: React.ElementType;
   selected: boolean;
   onClick?: () => void;
 }) {
-  const Thumbnail = props.Thumbnail || DefaultThumbnail;
+  const Thumbnail = props.Thumbnail || Scatter;
   return (
     <div
       className={
@@ -55,7 +46,7 @@ function BoxView(props: {
       onClick={props.onClick}
     >
       <div className="ScrollView-thumbnail">
-        <Thumbnail item={props.item} />
+        <Thumbnail data={props.item.data} />
       </div>
       <div className="ScrollView-label">{props.item.title}</div>
     </div>

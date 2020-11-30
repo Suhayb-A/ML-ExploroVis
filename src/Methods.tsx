@@ -13,6 +13,11 @@ function Methods(props: Props) {
   const methods = props.catagories[catagory];
   if (!methods) return <></>;
   const method = methods.types[selectedMethodIDX];
+  const dataSet = props.dataSet;
+
+  methods.types.forEach(method => {
+    method['data'] = dataSet.data // TODO: Request formatted data
+  });
 
   return (
     <>
@@ -34,8 +39,8 @@ function Methods(props: Props) {
         <h4>TEMP: Hyperparameters</h4>
         <div>
           method: {methods._id}, {method._id}
-          <br/>data:{JSON.stringify(props.dataSet.data)}
-          <br/>raw:{JSON.stringify(props.dataSet.csv)}
+          <br/>data:{JSON.stringify(dataSet.data)}
+          <br/>raw:{JSON.stringify(dataSet.csv)}
         </div>
         {/* TODO Add Hyperparameters under dataset, when a paramiter type is selected it would appear highlighted */}
       </div>

@@ -21,9 +21,10 @@ function App() {
       setMethodTypes(await response.json());
     })
   }, []);
+
   const dataSet =(dataSets[selectedDataIDX] || {});
   return <main>
-    <div id="datasets" >
+    <div id="datasets">
       <h4>Data Set</h4>
       <ScrollView items={dataSets} selectedIDX={selectedDataIDX} onSelect={setSelectedDataIDX}/>
     </div>
