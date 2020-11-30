@@ -25,7 +25,7 @@ function App() {
   const dataSet =(dataSets[selectedDataIDX] || {});
   return <main>
     <div id="datasets">
-      <h4>Data Set</h4>
+      <h3>Data Set</h3>
       <ScrollView items={dataSets} selectedIDX={selectedDataIDX} onSelect={setSelectedDataIDX}/>
     </div>
     <div id="data_vis">

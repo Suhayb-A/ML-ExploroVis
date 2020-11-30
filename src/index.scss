@@ -11,7 +11,7 @@ h1,
 h2,
 h3,
 h4 {
-  margin: 15px;
+  margin: 15px 0;
   margin-bottom: 0px;
   user-select: none;
 }
@@ -101,7 +101,10 @@ main {
 }
 
 #datasets {
-  background: linear-gradient(0deg, hsl(0, 0%, 93%) 0%, hsl(0, 0%, 97%) 50%);
+  h3 {
+    margin-left: 15px;
+  }
+  background: hsl(0, 0%, 97%) 50%;
 }
 
 #method {
@@ -136,6 +139,17 @@ main {
     outline: none;
     margin-bottom: 0;
   }
+
+  // Top Boarder
+  position: relative;
+  &::before {
+    content: " ";
+    position: absolute;
+    top: 0;
+    right: 15px;
+    left: 15px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+  }
 }
 
 #data_vis {
@@ -146,6 +160,8 @@ main {
 
 #main_container {
   flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .ScrollView-thumbnail {
@@ -153,4 +169,27 @@ main {
     width: 100%;
     height: 100%;
   }
+}
+
+#main_vis {
+  width: 100%;
+  flex-grow: 1;
+}
+
+#hyperparameter {
+  padding: 15px;
+  background: hsl(0, 0%, 97%);
+
+  // Left Boarder
+  position: relative;
+  &::before {
+    content: " ";
+    position: absolute;
+    top: 15px;
+    bottom: 15px;
+    left: 0;
+    border-left: 1px solid rgba(0, 0, 0, 0.05);
+  }
+
+
 }

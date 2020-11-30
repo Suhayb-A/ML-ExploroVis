@@ -6,17 +6,51 @@ export const COLORS = ["red", "blue"];
 
 interface Props {
   data: any;
+  id?: string;
+  responsive?: boolean;
 }
 
-class Scatter extends React.Component<Props> {
+interface State {
+  dimentions: [number, number];
+}
+
+class Scatter extends React.Component<Props, State> {
   svgRef: React.RefObject<SVGSVGElement>;
+
+  static defaultProps = {
+    responsive: false
+  }
+
   constructor(props: Props) {
     super(props);
     this.svgRef = createRef();
+    this.state = {
+      dimentions: [0,0]
+    };
+    this.updateDimentions = this.updateDimentions.bind(this);
   }
 
   componentDidMount() {
-    this.callDrawGraph();
+    this.updateDimentions();
+
+    if (!this.props.responsive) return;
+    window.addEventListener('resize', this.updateDimentions);
+  }
+
+  componentWillUnmount() {
+    if (!this.props.responsive) return;
+    window.removeEventListener('resize', this.updateDimentions);
+  }
+
+  private updateDimentions() {
+    const svgElement = this.svgRef.current as any;
+    this.setState((state) => ({
+      ...state,
+      dimentions: [
+        svgElement.clientWidth,
+        svgElement.clientHeight,
+      ]
+    }));
   }
 
   componentDidUpdate() {
@@ -49,10 +83,7 @@ class Scatter extends React.Component<Props> {
 
     const svgElement = this.svgRef.current;
     const svg = d3.select(svgElement);
-    const dims = [
-      (svgElement as any).clientWidth,
-      (svgElement as any).clientHeight,
-    ];
+    const dims = this.state.dimentions;
 
     const colors = d3.scaleOrdinal().domain(groups_domain).range(COLORS);
 
@@ -92,70 +123,8 @@ class Scatter extends React.Component<Props> {
   }
 
   render() {
-    return <svg ref={this.svgRef} />;
+    return <svg id={this.props.id} ref={this.svgRef} />;
   }
 }
-
-// function Scatter(props: Props) {
-//   const svgRef = useRef();
-
-//   useEffect(() => {
-//     if (!props.data) return;
-
-//     // Get the X & Y ranges, and the number of groups.
-//     const { domains, groups_domain } = props.data.reduce(
-//       (results, value) => {
-//         results.domains[0][0] = Math.min(results.domains[0][0], value.x);
-//         results.domains[0][1] = Math.max(results.domains[0][1], value.x);
-//         results.domains[1][0] = Math.min(results.domains[1][0], value.y);
-//         results.domains[1][1] = Math.max(results.domains[1][1], value.y);
-
-//         results.groups_domain.add(value.g);
-//         return results;
-//       },
-//       {
-//         domains: [
-//           [Infinity, -Infinity], // X
-//           [Infinity, -Infinity], // Y
-//         ],
-//         groups_domain: new Set(), // Groups
-//       }
-//     );
-
-//     const svg = d3.select(svgRef.current);
-//     const dims = [
-//       (svgRef.current as any).clientWidth,
-//       (svgRef.current as any).clientHeight,
-//     ];
-
-//     const colors = d3.scaleOrdinal().domain(groups_domain).range(COLORS);
-
-//     const [x, y] = domains.map((domain, idx) =>
-//       d3
-//         .scaleLinear()
-//         .domain(domain)
-//         .range([PADDING, dims[idx] - PADDING])
-//     );
-
-//     const points = svg.selectAll("circle").data(props.data);
-
-//     type Points = typeof points;
-//     function update(points: Points) {
-//       points
-//         .attr("cx", (d: any) => x(d.x))
-//         .attr("cy", (d: any) => y(d.y))
-//         .attr("fill", (d: any) => colors(d.g) as string)
-//         .attr("r", RADIUS);
-//     }
-
-//     update(points.enter().append("circle"));
-
-//     update(points);
-
-//     points.exit().remove();
-//   }, [props.data]);
-
-//   return <svg ref={svgRef} />;
-// }
 
 export default Scatter;
