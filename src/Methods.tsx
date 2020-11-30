@@ -36,7 +36,7 @@ function Methods(props: Props) {
         <ScrollView items={methods.types} selectedIDX={selectedMethodIDX} onSelect={setSelectedMethodIDX}/>
       </div>
       <div id="main_container">
-        <Scatter id="main_vis" data={dataSet.data} responsive={true}/>
+        <Scatter id="main_vis" data={dataSet.data} responsive={true} radius={3}/>
         <div id="hyperparameter">
           <h1>Main Vis</h1>
           <h4>TEMP: Hyperparameters</h4>

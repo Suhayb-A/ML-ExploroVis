@@ -1,13 +1,13 @@
 import React, { createRef } from "react";
 import * as d3 from "d3";
-const RADIUS = 2;
-const PADDING = 6;
+const PADDING = 8;
 export const COLORS = ["red", "blue"];
 
 interface Props {
   data: any;
   id?: string;
   responsive?: boolean;
+  radius?: number
 }
 
 interface State {
@@ -18,7 +18,8 @@ class Scatter extends React.Component<Props, State> {
   svgRef: React.RefObject<SVGSVGElement>;
 
   static defaultProps = {
-    responsive: false
+    responsive: false,
+    radius: 2
   }
 
   constructor(props: Props) {
@@ -105,14 +106,14 @@ class Scatter extends React.Component<Props, State> {
     catagoryColors: d3.ScaleOrdinal<string, unknown, never>
   ) {
     const points = svg.selectAll("circle").data(data);
-
+    const radius = this.props.radius;
     type Points = typeof points;
     function update(points: Points) {
       points
         .attr("cx", (d: any) => scaleX(d.x))
         .attr("cy", (d: any) => scaleY(d.y))
         .attr("fill", (d: any) => catagoryColors(d.g) as string)
-        .attr("r", RADIUS);
+        .attr("r", radius);
     }
 
     update(points.enter().append("circle"));
