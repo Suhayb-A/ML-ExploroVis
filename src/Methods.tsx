@@ -1,25 +1,43 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ScrollView from "./components/ScrollView";
-import Scatter from "./components/Scatter";
-import {DataSet} from "./data"
+import Plot from "./components/Plot";
+import { DataSet } from "./data";
+import { csvParse } from "d3";
 
 interface Props {
   catagories: any;
-  dataSet: DataSet;
+  dataSet?: DataSet;
 }
 
 function Methods(props: Props) {
   const [catagory, setCatagory] = useState(0);
   const [selectedMethodIDX, setSelectedMethodIDX] = useState(0);
-  const methods = props.catagories[catagory];
+  const [methods, setMethods] = useState(undefined);
+
+  useEffect(() => {
+    if (!props.catagories || !props.dataSet || !props.catagories[catagory])
+      return;
+    const methods = props.catagories[catagory];
+    const dataSet = props.dataSet;
+    for (const i in methods.types) {
+      compute(dataSet.csv, methods._id, methods.types[i]._id).then((results) => {
+        setMethods(() => {
+          // Make sure that the data set is the same
+          if (dataSet !== props.dataSet) return;
+          const methods = props.catagories[catagory];
+          methods.types[i] = { ...methods.types[i], ...results };
+          return { ...methods };
+        });
+      });
+    }
+  }, [catagory, props.dataSet, props.catagories]);
+
+  //TODO: Support hyperparameters
+
   if (!methods) return <></>;
   const method = methods.types[selectedMethodIDX];
-  const dataSet = props.dataSet;
-
-  methods.types.forEach(method => {
-    method['data'] = dataSet.data // TODO: Request formatted data
-  });
-
+  console.log(methods);
+  
   return (
     <>
       <div id="method">
@@ -33,10 +51,20 @@ function Methods(props: Props) {
             </option>
           ))}
         </select>
-        <ScrollView items={methods.types} selectedIDX={selectedMethodIDX} onSelect={setSelectedMethodIDX}/>
+        <ScrollView
+          items={methods.types}
+          selectedIDX={selectedMethodIDX}
+          onSelect={setSelectedMethodIDX}
+        />
       </div>
       <div id="main_container">
-        <Scatter id="main_vis" data={dataSet.data} responsive={true} radius={3}/>
+        <Plot
+          id="main_vis"
+          value={method}
+          colorOn={catagory == 0 ? 'cluster': 'g'}
+          responsive={true}
+          radius={3}
+        />
         <div id="hyperparameter">
           <h1>Main Vis</h1>
           <h4>TEMP: Hyperparameters</h4>
@@ -48,6 +76,26 @@ function Methods(props: Props) {
       </div>
     </>
   );
+}
+
+async function compute(csvData, catagoryID, methodID) {
+  const response = await fetch(
+    `http://127.0.0.1:4242/compute/${catagoryID}/${methodID}`,
+    {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        data: csvData,
+        args: {
+        // TODO: hyperparameters
+        }
+      }),
+    }
+  );
+  const resp = await response.json();
+  return resp;
 }
 
 export default Methods;

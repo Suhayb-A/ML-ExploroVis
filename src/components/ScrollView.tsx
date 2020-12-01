@@ -1,5 +1,5 @@
 import React from "react";
-import Scatter from './Scatter';
+import Plot from './Plot';
 
 interface Props {
   items: any[];
@@ -37,7 +37,7 @@ function BoxView(props: {
   selected: boolean;
   onClick?: () => void;
 }) {
-  const Thumbnail = props.Thumbnail || Scatter;
+  const Thumbnail = props.Thumbnail || Plot;
   return (
     <div
       className={
@@ -46,7 +46,7 @@ function BoxView(props: {
       onClick={props.onClick}
     >
       <div className="ScrollView-thumbnail">
-        <Thumbnail data={props.item.data} />
+        <Thumbnail value={props.item} />
       </div>
       <div className="ScrollView-label">{props.item.title}</div>
     </div>

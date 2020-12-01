@@ -13,3 +13,6 @@ x,y,g
 0,0,0
 1,1,1
 ```
+
+**Note:** Colors are assigned using the 'g' column. 'g' should contain positive
+integers, '-1's are always uncolored.

@@ -6,7 +6,10 @@
   "description": "TODO",
   "author": "TODO",
   "build": {
-    "appId": "edu.ucdavis.exploro.vis"
+    "extraResources": [
+      "./python/data/",
+      "./python/build/"
+    ]
   },
   "version": "0.1.0",
   "private": true,
@@ -14,6 +17,7 @@
     "cross-env": "^7.0.2",
     "d3": "^6.2.0",
     "electron-is-dev": "^1.2.0",
+    "fetch-retry": "^4.0.1",
     "node-sass": "4.14.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1"
@@ -46,9 +50,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "build": {
-    "extraResources": ["./python/data/", "./python/build/"]
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.11.4",

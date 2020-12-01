@@ -1,32 +1,34 @@
 import React, { createRef } from "react";
 import * as d3 from "d3";
 const PADDING = 8;
-export const COLORS = ["red", "blue"];
+export const COLORS = ["black", ...d3.schemeCategory10];
 
-interface Props {
-  data: any;
+export interface Props {
+  value: any;
   id?: string;
   responsive?: boolean;
-  radius?: number
+  radius?: number;
+  colorOn?: string;
 }
 
-interface State {
+export interface State {
   dimentions: [number, number];
 }
 
-class Scatter extends React.Component<Props, State> {
-  svgRef: React.RefObject<SVGSVGElement>;
+class Base extends React.Component<Props, State> {
+  protected svgRef: React.RefObject<SVGSVGElement>;
 
   static defaultProps = {
     responsive: false,
-    radius: 2
-  }
+    radius: 2,
+    colorOn: "g",
+  };
 
   constructor(props: Props) {
     super(props);
     this.svgRef = createRef();
     this.state = {
-      dimentions: [0,0]
+      dimentions: [0, 0],
     };
     this.updateDimentions = this.updateDimentions.bind(this);
   }
@@ -35,22 +37,19 @@ class Scatter extends React.Component<Props, State> {
     this.updateDimentions();
 
     if (!this.props.responsive) return;
-    window.addEventListener('resize', this.updateDimentions);
+    window.addEventListener("resize", this.updateDimentions);
   }
 
   componentWillUnmount() {
     if (!this.props.responsive) return;
-    window.removeEventListener('resize', this.updateDimentions);
+    window.removeEventListener("resize", this.updateDimentions);
   }
 
   private updateDimentions() {
     const svgElement = this.svgRef.current as any;
     this.setState((state) => ({
       ...state,
-      dimentions: [
-        svgElement.clientWidth,
-        svgElement.clientHeight,
-      ]
+      dimentions: [svgElement.clientWidth, svgElement.clientHeight],
     }));
   }
 
@@ -59,9 +58,9 @@ class Scatter extends React.Component<Props, State> {
   }
 
   private callDrawGraph() {
-    if (!this.props.data) return;
-    const data = this.props.data || [];
-
+    if (!this.props.value || !this.props.value.data) return;
+    const data = this.props.value.data || [];
+    const colorOn = this.props.colorOn;
     // Get the X & Y ranges, and the number of groups.
     const { domains, groups_domain } = data.reduce(
       (results, value) => {
@@ -70,7 +69,8 @@ class Scatter extends React.Component<Props, State> {
         results.domains[1][0] = Math.min(results.domains[1][0], value.y);
         results.domains[1][1] = Math.max(results.domains[1][1], value.y);
 
-        results.groups_domain.add(value.g);
+        if (colorOn) results.groups_domain.add(value[colorOn]);
+
         return results;
       },
       {
@@ -86,7 +86,10 @@ class Scatter extends React.Component<Props, State> {
     const svg = d3.select(svgElement);
     const dims = this.state.dimentions;
 
-    const colors = d3.scaleOrdinal().domain(groups_domain).range(COLORS);
+    const colors = d3
+      .scaleOrdinal()
+      .domain([-1, ...groups_domain])
+      .range(COLORS);
 
     const [x, y] = domains.map((domain, idx) =>
       d3
@@ -105,22 +108,7 @@ class Scatter extends React.Component<Props, State> {
     scaleY: d3.ScaleLinear<number, number, never>,
     catagoryColors: d3.ScaleOrdinal<string, unknown, never>
   ) {
-    const points = svg.selectAll("circle").data(data);
-    const radius = this.props.radius;
-    type Points = typeof points;
-    function update(points: Points) {
-      points
-        .attr("cx", (d: any) => scaleX(d.x))
-        .attr("cy", (d: any) => scaleY(d.y))
-        .attr("fill", (d: any) => catagoryColors(d.g) as string)
-        .attr("r", radius);
-    }
 
-    update(points.enter().append("circle"));
-
-    update(points);
-
-    points.exit().remove();
   }
 
   render() {
@@ -128,4 +116,4 @@ class Scatter extends React.Component<Props, State> {
   }
 }
 
-export default Scatter;
+export default Base;
