@@ -6,74 +6,70 @@ const BrowserWindow = electron.BrowserWindow;
 const path = require("path");
 const isDev = require("electron-is-dev");
 
-const APP_NAME = "ML ExploroVis"
+const APP_NAME = "ML ExploroVis";
 app.setName(APP_NAME);
 
 let APP_PATH;
-if (!isDev)
-  APP_PATH = process.resourcesPath;
-else
-  APP_PATH = app.getAppPath()
+if (!isDev) APP_PATH = process.resourcesPath;
+else APP_PATH = app.getAppPath();
 
-const PY_DIST_FOLDER = 'build'
-const PY_MODULE = 'main'
+const PY_DIST_FOLDER = "build";
+const PY_MODULE = "main";
 
-let pyProc = null
-let pyPort = null
+let pyProc = null;
+let pyPort = null;
 
 function getScriptPath() {
-  if (isDev)
-    return path.join(APP_PATH, 'python', PY_MODULE + '.py')
+  if (isDev) return path.join(APP_PATH, "python", PY_MODULE + ".py");
 
-  if (process.platform === 'win32')
-    return path.join(APP_PATH, 'python', PY_DIST_FOLDER, PY_MODULE, PY_MODULE + '.exe')
+  if (process.platform === "win32")
+    return path.join(
+      APP_PATH,
+      "python",
+      PY_DIST_FOLDER,
+      PY_MODULE,
+      PY_MODULE + ".exe"
+    );
 
-  return path.join(APP_PATH, 'python', PY_DIST_FOLDER, PY_MODULE, PY_MODULE)
+  return path.join(APP_PATH, "python", PY_DIST_FOLDER, PY_MODULE, PY_MODULE);
 }
 
 function selectPort() {
-  pyPort = 4242
-  return pyPort
+  pyPort = 4242;
+  return pyPort;
 }
 
 function createPyProc() {
-  let script = getScriptPath()
-  let port = '' + selectPort()
+  let script = getScriptPath();
+  let port = "" + selectPort();
   let options = {
     env: {
       ...process.env,
-      DEBUG: isDev
-    }
-  }
+      DEBUG: isDev,
+    },
+  };
 
   if (isDev)
-    pyProc = require('child_process').spawn('python3', [script, port], options)
-  else
-    pyProc = require('child_process').spawn(script, [port], options)
+    pyProc = require("child_process").spawn("python3", [script, port], {
+      ...options,
+      stdio: "inherit",
+    });
+  else pyProc = require("child_process").spawn(script, [port], options);
 
   // Print the output of the python program
   if (pyProc != null) {
-    console.log('child process success on port ' + port)
-    pyProc.stdout.setEncoding('utf8');
-    pyProc.stdout.on('data', (data) => {
-        console.log('Python: ' + data);
-    });
-
-    pyProc.stderr.setEncoding('utf8');
-    pyProc.stderr.on('data', (data) => {
-        console.log('Python stderr: ' + data);
-    });
+    console.log("child process success on port " + port);
   }
 }
 
 function exitPyProc() {
-  pyProc.kill()
-  pyProc = null
-  pyPort = null
+  pyProc.kill();
+  pyProc = null;
+  pyPort = null;
 }
 
-app.on('ready', createPyProc)
-app.on('will-quit', exitPyProc)
+app.on("ready", createPyProc);
+app.on("will-quit", exitPyProc);
 
 /** Main Window */
 
@@ -90,8 +86,8 @@ function createWindow() {
       webSecurity: false,
       nodeIntegration: true,
       enableRemoteModule: true,
-      devTools: isDev
-    }
+      devTools: isDev,
+    },
   });
   mainWindow.loadURL(
     isDev
@@ -99,7 +95,7 @@ function createWindow() {
       : `file://${path.join(__dirname, "../build/index.html")}`
   );
 
-  if (isDev) mainWindow.webContents.openDevTools()
+  if (isDev) mainWindow.webContents.openDevTools();
 
   mainWindow.on("closed", () => (mainWindow = null));
 }

@@ -1,7 +1,7 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import Graph from "./Plot";
-import Play from "./assets/play.svg"
-import Pause from "./assets/pause.svg"
+import Play from "./assets/play.svg";
+import Pause from "./assets/pause.svg";
 
 interface Props {
   frames: any[]; // An array of values
@@ -10,35 +10,41 @@ interface Props {
 function TimeLine(props: Props) {
   const [state, setState] = useState({
     playing: false,
-    currentFrame: 0
+    currentFrame: 0,
   });
 
   useEffect(() => {
     setState({
       playing: false,
-      currentFrame: 0
+      currentFrame: 0,
     });
-  }, [props.frames])
+  }, [props.frames]);
 
   return (
     <div className="timeline">
-      <Graph
-          value={props.frames[state.currentFrame]}
-          responsive={true}
-        />
+      <Graph value={props.frames[state.currentFrame]} responsive={true} />
 
-      <div className="timeline-controls">
-        <PlayButton playing={state.playing} onClick={() => setState((state) => ({...state, playing: !state.playing}))}/>
-        <input className="timeline-track" type="range"/>
-      </div>
+      {props.frames.length > 1 && (
+        <div className="timeline-controls">
+          <PlayButton
+            playing={state.playing}
+            onClick={() =>
+              setState((state) => ({ ...state, playing: !state.playing }))
+            }
+          />
+          <input className="timeline-track" type="range" />
+        </div>
+      )}
     </div>
   );
 }
 
-function PlayButton(props: {playing: boolean, onClick:() => void}) {
-  return <div className="timeline-play-pause" onClick={props.onClick}>
-    <img src={props.playing ? Pause : Play}/>
-  </div>
+function PlayButton(props: { playing: boolean; onClick: () => void }) {
+  return (
+    <div className="timeline-play-pause" onClick={props.onClick}>
+      <img src={props.playing ? Pause : Play} />
+    </div>
+  );
 }
 
 TimeLine.defaultProps = {

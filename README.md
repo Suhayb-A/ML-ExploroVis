@@ -14,7 +14,7 @@ A Machine Learning Exploration Application.
 │   └── ...
 ├── requirements.txt      - Python development dependencies
 │
-├── public                - React assets
+├── public                - Electron config
 ├── src                   - React application
 └── ...
 ```
