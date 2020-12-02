@@ -164,6 +164,39 @@ main {
   flex-direction: column;
 }
 
+.timeline {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+
+  .graph {
+    width: 100%;
+    flex-grow: 1;
+  }
+
+  .timeline-controls {
+    height: 44px;
+    background: hsl(0, 0%, 97%);
+    border-left: 1px solid rgba(0, 0, 0, 0.05);
+    display: flex;
+    padding: 0 15px 0 0;
+  }
+
+  .timeline-track {
+    flex-grow: 1;
+  }
+  .timeline-play-pause {
+    cursor: pointer;
+    width: 44px;
+    height: 44px;
+    margin-left: 15px - 7px;
+    img {
+      padding: 7px;
+      width: 30px;
+    }
+  }
+}
+
 .ScrollView-thumbnail {
   > svg {
     width: 100%;
@@ -171,26 +204,10 @@ main {
   }
 }
 
-#main_vis {
-  width: 100%;
-  flex-grow: 1;
-}
-
 #hyperparameter {
   padding: 15px;
   padding-top: 0;
   background: hsl(0, 0%, 97%);
 
-  // Left Boarder
-  position: relative;
-  &::before {
-    content: " ";
-    position: absolute;
-    top: 15px;
-    bottom: 15px;
-    left: 0;
-    border-left: 1px solid rgba(0, 0, 0, 0.05);
-  }
-
-
+  border-left: 1px solid rgba(0, 0, 0, 0.05);
 }

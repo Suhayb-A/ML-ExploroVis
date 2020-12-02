@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ScrollView from "./components/ScrollView";
-import Graph from "./components/Plot";
+import Timeline from "./components/Timeline";
 import { DataSet } from "./data";
 
 interface Props {
@@ -24,7 +24,7 @@ function Methods(props: Props) {
           // Make sure that the data set is the same
           if (dataSet !== props.dataSet) return;
           const methods = props.catagories[catagory];
-          methods.types[i] = { ...methods.types[i], ...results };
+          methods.types[i] = { ...methods.types[i], results };
           return { ...methods };
         });
       });
@@ -56,12 +56,7 @@ function Methods(props: Props) {
         />
       </div>
       <div id="main_container">
-        <Graph
-          id="main_vis"
-          value={method}
-          colorOn={catagory == 0 ? 'cluster': 'g'}
-          responsive={true}
-        />
+        <Timeline frames={method.results}/>
         <div id="hyperparameter">
           <h1>Main Vis</h1>
           <h4>TEMP: Hyperparameters</h4>

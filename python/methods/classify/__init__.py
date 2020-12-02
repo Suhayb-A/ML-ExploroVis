@@ -15,10 +15,10 @@ def KNeighbors(data, args):
   results = KNeighborsClassifier(2).fit(X, y)
   Z = results.predict_proba(np.c_[xx.ravel(), yy.ravel()])
 
-  return {
+  return [{
     'data': data.to_dict('records'),
     'bound': Z.tolist()
-  }
+  }]
 
 methods = {
   'nearest_neighbors' : {

@@ -7,7 +7,6 @@ export const COLORS = ["black", ...d3.schemeCategory10];
 
 export interface Props {
   value: any;
-  id?: string;
   responsive?: boolean;
   radius?: number;
   colorOn?: string;
@@ -108,7 +107,7 @@ class Base extends React.Component<Props, State> {
   }
 
   render() {
-    return <svg id={this.props.id} ref={this.svgRef} />;
+    return <svg className="graph" ref={this.svgRef} />;
   }
 }
 

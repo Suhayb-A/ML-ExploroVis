@@ -4,9 +4,9 @@ def basic(func):
   def inner(data, args):
     results = cluster.DBSCAN(**args).fit(data.loc[:, ['x', 'y']])
     data['cluster'] = results.labels_
-    return {
+    return [{
       'data': data.to_dict('records')
-    }
+    }]
   return inner;
 
 methods = {
