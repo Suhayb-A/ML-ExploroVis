@@ -10,10 +10,11 @@ A Machine Learning Exploration Application.
 ├── python                - Python application
 │   ├── data              - Default data sets
 │   ├── main.py           - Python entry point
-│   ├── methods           - Algorithm Config files
+│   ├── methods           - Algorithm config files
 │   └── requirements.txt  - Python production dependencies
 ├── requirements.txt      - Python development dependencies
-└── src                   - React application
+├── src                   - React application
+└── ...
 ```
 
 ## Default data sets
@@ -29,8 +30,8 @@ x,y,g
 1,1,1
 ```
 
-**Note:** Colors are assigned using the 'g' column. 'g' should contain positive
-integers, '-1's are always uncolored.
+**Note:** *Colors are assigned using the 'g' column. 'g' values should be
+positive integers, **'g' values of '-1's are uncolored.***
 
 ## Run
 
