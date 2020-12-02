@@ -89,7 +89,8 @@ function createWindow() {
     webPreferences: {
       webSecurity: false,
       nodeIntegration: true,
-      enableRemoteModule: true
+      enableRemoteModule: true,
+      devTools: isDev
     }
   });
   mainWindow.loadURL(

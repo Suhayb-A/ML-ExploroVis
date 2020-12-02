@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ScrollView from "./components/ScrollView";
-import Plot from "./components/Plot";
+import Graph from "./components/Plot";
 import { DataSet } from "./data";
-import { csvParse } from "d3";
 
 interface Props {
   catagories: any;
@@ -36,8 +35,7 @@ function Methods(props: Props) {
 
   if (!methods) return <></>;
   const method = methods.types[selectedMethodIDX];
-  console.log(methods);
-  
+
   return (
     <>
       <div id="method">
@@ -58,12 +56,11 @@ function Methods(props: Props) {
         />
       </div>
       <div id="main_container">
-        <Plot
+        <Graph
           id="main_vis"
           value={method}
           colorOn={catagory == 0 ? 'cluster': 'g'}
           responsive={true}
-          radius={3}
         />
         <div id="hyperparameter">
           <h1>Main Vis</h1>

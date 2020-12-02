@@ -1,5 +1,5 @@
 import React from "react";
-import Plot from './Plot';
+import Graph from "./Plot";
 
 interface Props {
   items: any[];
@@ -33,11 +33,9 @@ ScrollView.defaultProps = {
 
 function BoxView(props: {
   item: any;
-  Thumbnail?: React.ElementType;
   selected: boolean;
   onClick?: () => void;
 }) {
-  const Thumbnail = props.Thumbnail || Plot;
   return (
     <div
       className={
@@ -46,7 +44,7 @@ function BoxView(props: {
       onClick={props.onClick}
     >
       <div className="ScrollView-thumbnail">
-        <Thumbnail value={props.item} />
+        <Graph value={props.item} thumbnail={true} />
       </div>
       <div className="ScrollView-label">{props.item.title}</div>
     </div>
