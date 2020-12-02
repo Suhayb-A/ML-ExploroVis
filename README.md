@@ -6,13 +6,15 @@ A Machine Learning Exploration Application.
 
 ```
 .
-├── public                - React public
 ├── python                - Python application
 │   ├── data              - Default data sets
 │   ├── main.py           - Python entry point
 │   ├── methods           - Algorithm config files
-│   └── requirements.txt  - Python production dependencies
+│   ├── requirements.txt  - Python production dependencies
+│   └── ...
 ├── requirements.txt      - Python development dependencies
+│
+├── public                - React assets
 ├── src                   - React application
 └── ...
 ```
