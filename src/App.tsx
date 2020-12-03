@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import ScrollView from "./components/ScrollView";
 import { loadDefaultDataSets } from "./data";
 import Methods from "./Methods";
+
 const fetchRetry = require("fetch-retry")(fetch, {
   retries: 10,
   retryDelay: 800,

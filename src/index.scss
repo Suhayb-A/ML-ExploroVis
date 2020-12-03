@@ -27,6 +27,15 @@ main {
   height: 100vh;
 }
 
+select {
+  padding: 4px;
+  border-radius: 0px;
+  font-weight: bold;
+  border: 0.5px solid rgba(0, 0, 0, 0.15);
+  outline: none;
+  margin-bottom: 0;
+}
+
 .selectable {
   cursor: pointer;
 }
@@ -132,12 +141,6 @@ main {
 
   select {
     margin: 15px;
-    padding: 4px;
-    border-radius: 0px;
-    font-weight: bold;
-    border: 0.5px solid rgba(0, 0, 0, 0.15);
-    outline: none;
-    margin-bottom: 0;
   }
 
   // Top Boarder
@@ -226,8 +229,20 @@ main {
 
 #hyperparameter {
   padding: 15px;
-  padding-top: 0;
+  padding-top:  0px;
   background: hsl(0, 0%, 97%);
 
   border-left: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+#hyperparameter {
+  label {
+    display: inline-block;
+    padding: 8px 0;
+    font-weight: bold;
+    width: 180px;
+  }
+  input, select {
+    width: calc(100% - 180px);
+  }
 }

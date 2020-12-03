@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import ScrollView from "./components/ScrollView";
 import Timeline from "./components/Timeline";
 import { DataSet } from "./data";
-
+import Hyperparameters from "./Hyperparameters";
 interface Props {
   catagories: any;
   dataSet?: DataSet;
@@ -57,14 +57,7 @@ function Methods(props: Props) {
       </div>
       <div id="main_container">
         <Timeline frames={method.frames}/>
-        <div id="hyperparameter">
-          <h1>Main Vis</h1>
-          <h4>TEMP: Hyperparameters</h4>
-          <div>
-            method: {methods._id}, {method._id}
-          </div>
-          {/* TODO Add Hyperparameters under dataset, when a paramiter type is selected it would appear highlighted */}
-        </div>
+        <Hyperparameters method={method}/>
       </div>
     </>
   );
