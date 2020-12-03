@@ -20,7 +20,7 @@ function TimeLine(props: Props) {
     currentFrame: 0,
   });
 
-  const frameCount = 10; //props.frames.length;
+  const frameCount = props.frames.length;
   const interval = useRef(null);
 
   useEffect(() => {
