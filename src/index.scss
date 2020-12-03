@@ -185,6 +185,7 @@ select {
     padding: 0 15px 0 0;
   }
 
+  .timeline-step,
   .timeline-play-pause {
     cursor: pointer;
     width: 44px;
@@ -193,6 +194,22 @@ select {
     img {
       padding: 7px;
       width: 30px;
+    }
+  }
+
+  .timeline-step {
+    border: 2px solid black;
+    border-radius: 8px;
+    height: 20px;
+    line-height: 20px;
+    font-weight: 600;
+    text-align: center;
+    margin-top: 10px;
+    margin-right: 8px;
+    margin-left: 4px;
+    &.selected {
+      background: black;
+      color: white;
     }
   }
 }
@@ -217,13 +234,14 @@ select {
     height: 15px;
     margin-top: -7px * 0.5;
     border-radius: 15px;
-    cursor: grab;
+    cursor: pointer;
   }
   &::-webkit-slider-runnable-track {
     height: 8px;
     background: rgba(0, 0, 0, 0.15);
     border-radius: 8px;
     width: 100%;
+    cursor: pointer;
   }
 }
 

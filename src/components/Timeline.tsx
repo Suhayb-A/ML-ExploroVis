@@ -2,9 +2,10 @@ import React, { useState, useEffect, useRef } from "react";
 import Graph from "./Plot";
 import Play from "./assets/play.svg";
 import Pause from "./assets/pause.svg";
+
 const STEP = 0.01;
 const FRAME_RATE = 30;
-const INCREMENT_PER_SECOND = 1;
+const INCREMENT_PER_SECOND = 1.5;
 const FRAME_RATE_MS = 1000 / FRAME_RATE;
 const INCREMENT_PER_FRAME = INCREMENT_PER_SECOND / FRAME_RATE;
 
@@ -15,6 +16,7 @@ interface Props {
 function TimeLine(props: Props) {
   const [state, setState] = useState({
     playing: false,
+    step: false,
     currentFrame: 0,
   });
 
@@ -23,6 +25,7 @@ function TimeLine(props: Props) {
 
   useEffect(() => {
     setState({
+      step: false,
       playing: false,
       currentFrame: 0,
     });
@@ -33,7 +36,7 @@ function TimeLine(props: Props) {
       clearInterval(interval.current);
       interval.current = null;
     };
-    if (!state.playing) {
+    if (!state.playing && !state.step) {
       if (interval.current) {
         clear();
       }
@@ -43,14 +46,19 @@ function TimeLine(props: Props) {
     if (!interval.current) {
       interval.current = setInterval(() => {
         setState((state: any) => {
-          const currentFrame = state.currentFrame + INCREMENT_PER_FRAME;
-
-          if (currentFrame > frameCount) {
+          let currentFrame = state.currentFrame + INCREMENT_PER_FRAME;
+          let stop = currentFrame > frameCount;
+          if (!stop && state.step && Math.floor(state.currentFrame) !== Math.floor(currentFrame)) {
+            currentFrame = Math.floor(currentFrame);
+            stop = true;
+          }
+          if (stop) {
             clear();
             return {
               ...state,
+              step: false,
               playing: false,
-              currentFrame: frameCount,
+              currentFrame: Math.min(currentFrame, frameCount),
             };
           }
           return {
@@ -62,7 +70,7 @@ function TimeLine(props: Props) {
     }
 
     return clear;
-  }, [state.playing]);
+  }, [state.playing, state.step]);
 
   const frameData = props.frames[state.currentFrame];
 
@@ -70,7 +78,7 @@ function TimeLine(props: Props) {
     <div className="timeline">
       <Graph value={frameData} responsive={true} />
 
-      {props.frames.length > 1 && (
+      {frameCount > 1 && (
       <div className="timeline-controls">
         <PlayButton
           playing={state.playing}
@@ -78,6 +86,9 @@ function TimeLine(props: Props) {
             setState((state) => ({ ...state, playing: !state.playing }))
           }
         />
+        <div className={"timeline-step" + (state.step ? " selected": "")} onClick={()=> {
+          setState((state) => ({ ...state, step: !state.step }))
+        }}>Step</div>
         <input
           className="timeline-track"
           type="range"
