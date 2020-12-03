@@ -33,7 +33,7 @@ export function loadDefaultDataSets(): Promise<DataSet[]> {
                   return resolve({
                     title: fileName.slice(0, -4),
                     csv: csvData,
-                    data: csvParse(csvData),
+                    frames: [{data: csvParse(csvData)}],
                   });
                 });
               })

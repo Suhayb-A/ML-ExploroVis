@@ -13,11 +13,7 @@ export interface Props {
   thumbnail?: boolean;
 }
 
-export interface State {
-  dimentions: [number, number];
-}
-
-class Base extends React.Component<Props, State> {
+class Base extends React.Component<Props> {
   protected svgRef: React.RefObject<SVGSVGElement>;
 
   static defaultProps = {
@@ -29,9 +25,6 @@ class Base extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.svgRef = createRef();
-    this.state = {
-      dimentions: [0, 0],
-    };
     this.updateDimentions = this.updateDimentions.bind(this);
   }
 
@@ -48,11 +41,7 @@ class Base extends React.Component<Props, State> {
   }
 
   private updateDimentions() {
-    const svgElement = this.svgRef.current as any;
-    this.setState((state) => ({
-      ...state,
-      dimentions: [svgElement.clientWidth, svgElement.clientHeight],
-    }));
+    this.forceUpdate();
   }
 
   componentDidUpdate() {
@@ -86,7 +75,7 @@ class Base extends React.Component<Props, State> {
 
     const svgElement = this.svgRef.current;
     const svg = d3.select(svgElement);
-    const dims = this.state.dimentions;
+    const dims = [svgElement.clientWidth, svgElement.clientHeight];
 
     const colors = d3
       .scaleOrdinal()

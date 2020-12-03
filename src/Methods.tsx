@@ -19,12 +19,12 @@ function Methods(props: Props) {
     const methods = props.catagories[catagory];
     const dataSet = props.dataSet;
     for (const i in methods.types) {
-      compute(dataSet.csv, methods._id, methods.types[i]._id).then((results) => {
+      compute(dataSet.csv, methods._id, methods.types[i]._id).then((frames) => {
         setMethods(() => {
           // Make sure that the data set is the same
           if (dataSet !== props.dataSet) return;
           const methods = props.catagories[catagory];
-          methods.types[i] = { ...methods.types[i], results };
+          methods.types[i] = { ...methods.types[i], frames };
           return { ...methods };
         });
       });
@@ -56,7 +56,7 @@ function Methods(props: Props) {
         />
       </div>
       <div id="main_container">
-        <Timeline frames={method.results}/>
+        <Timeline frames={method.frames}/>
         <div id="hyperparameter">
           <h1>Main Vis</h1>
           <h4>TEMP: Hyperparameters</h4>
