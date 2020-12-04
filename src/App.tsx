@@ -30,7 +30,10 @@ function App() {
   return (
     <main>
       <div id="datasets">
-        <h3>Data Set</h3>
+        <div id="datasets-navbar">
+          <h3>Data Sets</h3>
+          <div className="button" id="dataset-add">+</div>
+        </div>
         <ScrollView
           items={dataSets}
           selectedIDX={selectedDataIDX}

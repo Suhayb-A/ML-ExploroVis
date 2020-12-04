@@ -4,10 +4,9 @@ import Play from "./assets/play.svg";
 import Pause from "./assets/pause.svg";
 
 const STEP = 0.01;
-const FRAME_RATE = 30;
-const INCREMENT_PER_SECOND = 1.5;
+const FRAME_RATE = 60;
+const PLAYBACK_SPEED = 1;
 const FRAME_RATE_MS = 1000 / FRAME_RATE;
-const INCREMENT_PER_FRAME = INCREMENT_PER_SECOND / FRAME_RATE;
 
 interface Props {
   frames: any[]; // An array of values
@@ -46,7 +45,7 @@ function TimeLine(props: Props) {
     if (!interval.current) {
       interval.current = setInterval(() => {
         setState((state: any) => {
-          let currentFrame = state.currentFrame + INCREMENT_PER_FRAME;
+          let currentFrame = state.currentFrame + PLAYBACK_SPEED / FRAME_RATE;
           let stop = currentFrame > frameCount;
           if (!stop && state.step && Math.floor(state.currentFrame) !== Math.floor(currentFrame)) {
             currentFrame = Math.floor(currentFrame);

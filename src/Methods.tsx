@@ -54,6 +54,7 @@ function Methods(props: Props) {
           selectedIDX={selectedMethodIDX}
           onSelect={setSelectedMethodIDX}
         />
+        <div className="button">+</div>
       </div>
       <div id="main_container">
         <Timeline frames={method.frames}/>

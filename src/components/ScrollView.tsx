@@ -5,7 +5,6 @@ interface Props {
   items: any[];
   selectedIDX?: number;
   children?: React.ReactNode;
-  onAdd?: () => void;
   onSelect?: (idx: number) => void;
 }
 
@@ -20,9 +19,6 @@ function ScrollView(props: Props) {
           onClick={() => props.onSelect && props.onSelect(idx)}
         />
       ))}
-      {props.onAdd && (
-        <div className="AddButton selectable" onClick={props.onAdd} />
-      )}
     </div>
   );
 }
