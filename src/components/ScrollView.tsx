@@ -36,8 +36,6 @@ function BoxView(props: {
   selected: boolean;
   onClick?: () => void;
 }) {
-  // Get the last frame
-  const frame = props.item.frames[props.item.frames.length - 1];
   return (
     <div
       className={
@@ -46,7 +44,7 @@ function BoxView(props: {
       onClick={props.onClick}
     >
       <div className="ScrollView-thumbnail">
-        <Graph value={frame} thumbnail={true} />
+        <Graph frames={props.item.frames} thumbnail={true} />
       </div>
       <div className="ScrollView-label">{props.item.title}</div>
     </div>

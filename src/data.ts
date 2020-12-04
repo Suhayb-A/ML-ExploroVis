@@ -33,7 +33,13 @@ export function loadDefaultDataSets(): Promise<DataSet[]> {
                   return resolve({
                     title: fileName.slice(0, -4),
                     csv: csvData,
-                    frames: [{scatter: csvParse(csvData)}],
+                    frames: [{scatter: csvParse(csvData, function(d) {
+                      return {
+                        x: Number(d['x']),
+                        y: Number(d['y']),
+                        g: Number(d['g'])
+                      }
+                    })}],
                   });
                 });
               })

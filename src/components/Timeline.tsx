@@ -20,7 +20,7 @@ function TimeLine(props: Props) {
     currentFrame: 0,
   });
 
-  const frameCount = props.frames.length;
+  const frameCount = props.frames.length - 1;
   const interval = useRef(null);
 
   useEffect(() => {
@@ -72,22 +72,32 @@ function TimeLine(props: Props) {
     return clear;
   }, [state.playing, state.step]);
 
-  const frameData = props.frames[state.currentFrame];
-
   return (
     <div className="timeline">
-      <Graph value={frameData} responsive={true} />
+      <Graph frames={props.frames} responsive={true} t={state.currentFrame}/>
 
-      {frameCount > 1 && (
+      {frameCount > 0 && (
       <div className="timeline-controls">
         <PlayButton
           playing={state.playing}
           onClick={() =>
-            setState((state) => ({ ...state, playing: !state.playing }))
+            setState((state) => {
+              if (state.currentFrame == frameCount) {
+                // Restart
+                return { ...state, playing: !state.playing, currentFrame: 0 };
+              }
+              return { ...state, playing: !state.playing };
+            })
           }
         />
         <div className={"timeline-step" + (state.step ? " selected": "")} onClick={()=> {
-          setState((state) => ({ ...state, step: !state.step }))
+          setState((state) => {
+            if (state.currentFrame == frameCount) {
+              // Restart
+              return { ...state, step: !state.step, currentFrame: 0 };
+            }
+            return { ...state, step: !state.step }
+          })
         }}>Step</div>
         <input
           className="timeline-track"

@@ -5,19 +5,19 @@ export default function draw(
   value: any,
   scaleX: d3.ScaleLinear<number, number, never>,
   scaleY: d3.ScaleLinear<number, number, never>,
-  color: (item: any) => string | null,
   thumbnail?: boolean
 ) {
   const data = value.scatter;
   const points = svg.selectAll("circle").data(data);
-  const radius = thumbnail ? 2 : 3;
+  const radius = thumbnail ? 2 : 4;
 
   type Points = typeof points;
   function update(points: Points) {
+
     points
       .attr("cx", (d: any) => scaleX(d.x))
       .attr("cy", (d: any) => scaleY(d.y))
-      .attr("fill", color)
+      .attr("fill", (d:any) => d.color)
       .attr("r", radius);
   }
 
