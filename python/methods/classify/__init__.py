@@ -16,7 +16,7 @@ def KNeighbors(data, args):
   Z = results.predict_proba(np.c_[xx.ravel(), yy.ravel()])
 
   return [{
-    'data': data.to_dict('records'),
+    'scatter': data.to_dict('records'),
     'bound': Z.tolist()
   }]
 

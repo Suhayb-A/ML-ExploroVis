@@ -5,7 +5,7 @@ def basic(func):
     results = cluster.DBSCAN(**args).fit(data.loc[:, ['x', 'y']])
     data['cluster'] = results.labels_
     return [{
-      'data': data.to_dict('records')
+      'scatter': data.to_dict('records')
     }]
   return inner;
 

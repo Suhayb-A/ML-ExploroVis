@@ -49,8 +49,8 @@ class Base extends React.Component<Props> {
   }
 
   private callDrawGraph() {
-    if (!this.props.value || !this.props.value.data) return;
-    const data = this.props.value.data || [];
+    if (!this.props.value || !this.props.value.scatter) return;
+    const data = this.props.value.scatter || [];
     const colorOn = this.props.colorOn;
     // Get the X & Y ranges, and the number of groups.
     const { domains, groups_domain } = data.reduce(

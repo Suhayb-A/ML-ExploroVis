@@ -8,7 +8,8 @@ export default function draw(
   color: (item: any) => string | null,
   thumbnail?: boolean
 ) {
-  const points = svg.selectAll("circle").data(value.data);
+  const data = value.scatter;
+  const points = svg.selectAll("circle").data(data);
   const radius = thumbnail ? 2 : 3;
 
   type Points = typeof points;
