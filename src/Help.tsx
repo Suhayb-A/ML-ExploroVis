@@ -27,8 +27,8 @@ function Help({
   selectedDataSet: any;
   methodPath: string;
 }) {
-  const [dataSetContent, setDataSetContent] = useState(undefined);
-  const [methodContent, setMethodContent] = useState(undefined);
+  const [dataSetContent, setDataSetContent] = useState('');
+  const [methodContent, setMethodContent] = useState('');
 
   useEffect(() => {
     if (!selectedDataSet || !active) return;

@@ -81,7 +81,7 @@ $help-menu-width: 320px;
 }
 
 #help-data-set {
-  height: 193px;
+  height: 185px;
   width: 100%;
   background: hsla(211, 100%, 50%, 0.1);//rgba(0, 0, 0, 0.05);
 }
@@ -223,6 +223,9 @@ select,
     margin-left: 15px;
   }
   background: hsl(0, 0%, 97%) 50%;
+  .ScrollView {
+    padding-top: 0;
+  }
 }
 
 #method {
@@ -329,6 +332,7 @@ select,
 
   #timeline-speed {
     margin-left: 8px;
+    margin-right: 0;
     border: none;
     padding: 2px 4px;
 
