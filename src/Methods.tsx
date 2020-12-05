@@ -25,6 +25,15 @@ function Methods(props: Props) {
           // Make sure that the data set is the same
           if (dataSet !== props.dataSet) return;
           const methods = props.catagories[catagory];
+          frames = [frames[0], {scatter: [...((frames[0] as any).scatter)]}, frames[0]];
+          frames[1].scatter = frames[1].scatter.map(d => {
+            return {
+              x: 0.5,
+              y: 0.5,
+              g: d['g'] + 1
+            }
+          });
+
           methods.types[i] = { ...methods.types[i], frames };
           return { ...methods };
         });

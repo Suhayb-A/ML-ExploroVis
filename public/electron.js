@@ -76,9 +76,9 @@ app.on("will-quit", exitPyProc);
 let mainWindow;
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 600,
+    width: 800,
     height: 800,
-    minWidth: 600,
+    minWidth: 800,
     minHeight: 800,
     title: APP_NAME,
     resizable: true,

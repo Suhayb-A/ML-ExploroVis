@@ -20,6 +20,23 @@ def KNeighbors(data, args):
     'bound': Z.tolist()
   }]
 
+'''
+method_id : {
+  title: 'Method title",
+  args: [inputs.Range(arg_id, ...), ...],
+  algorithm:
+    A function that takes in the (data: pd.dataframe, args:
+    hyperparameters).
+    Returns:- Array of objects, with each object being a frame.
+    Return object format:-
+      {
+        'scatter': [{x:int, y:int, g:int, ...}, ...] # Scatter plot input
+        'bound': [{x,y}, ...]                        # Boundary
+        ...                                          # Other stats
+      }
+}
+'''
+
 methods = {
   'nearest_neighbors' : {
     'title': 'Nearest Neighbors',

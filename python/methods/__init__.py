@@ -6,7 +6,7 @@ import copy;
 Default data structure:
 {
   'title': the title of the data
-  'algorithms': algorithms
+  'types': algorithm configs
 }
 """
 config = {
