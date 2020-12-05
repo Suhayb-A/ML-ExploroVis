@@ -1,5 +1,5 @@
 $thumbnail_size: 88px;
-$blue: rgb(0,122, 255);
+$blue: rgb(0, 122, 255);
 body {
   margin: 0;
   font-size: 14px;
@@ -33,9 +33,8 @@ main {
 
 $help-menu-width: 320px;
 #help-menu {
-  background: hsla(211, 100%, 50%, 0.1);//hsl(0, 0%, 94%) 50%;
+  background: hsla(211, 100%, 50%, 0.1);
   width: 0px;
-  // border-left: 0.5px solid rgba(0, 0, 0, 0.15);
   overflow-y: scroll;
   overflow-x: hidden;
 
@@ -83,10 +82,15 @@ $help-menu-width: 320px;
 #help-data-set {
   height: 185px;
   width: 100%;
-  background: hsla(211, 100%, 50%, 0.1);//rgba(0, 0, 0, 0.05);
+  background: hsla(211, 100%, 50%, 0.1);
+}
+
+select {
+  cursor: pointer;
 }
 
 select,
+input:not([type="range"]),
 .button {
   padding: 4px;
   border-radius: 0px;
@@ -118,7 +122,9 @@ select,
   &:hover {
     background: rgba(0, 0, 0, 0.02);
   }
-  &:focus, &:active, &.active {
+  &:focus,
+  &:active,
+  &.active {
     background: $blue;
     color: white;
   }
@@ -190,12 +196,6 @@ select,
     line-height: 27px;
     margin: 8px;
     padding: 0;
-    // border: none;
-    // background: transparent;
-    // color: black;
-    // &:hover, &:focus, &:active {
-    //   color: $blue;
-    // }
     border-radius: 27px;
     margin-right: 0;
   }
@@ -210,7 +210,8 @@ select,
   display: flex;
 }
 
-#dataset-add,  #add-method {
+#dataset-add,
+#add-method {
   height: 27px;
   width: 27px;
   padding: 0;
@@ -376,7 +377,7 @@ select,
 
 #hyperparameter {
   padding: 15px;
-  padding-top:  0px;
+  padding-top: 0px;
   background: hsl(0, 0%, 97%);
 
   border-left: 1px solid rgba(0, 0, 0, 0.05);
@@ -386,14 +387,39 @@ select,
   }
 }
 
-#hyperparameter {
+#hyperparameter-options {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  row-gap: 8px;
+
   label {
     display: inline-block;
-    padding: 8px 0;
     font-weight: bold;
-    width: 180px;
+    padding-right: 8px;
+    align-self: center;
   }
-  input, select {
-    width: calc(100% - 180px);
+  input[type="range"] {
+    height: 25px;
+
+    background: transparent;
+    -webkit-appearance: none;
+    outline: none;
+
+    &::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      background: $blue;
+      width: 15px;
+      height: 15px;
+      margin-top: -7px * 0.5;
+      border-radius: 15px;
+      cursor: pointer;
+    }
+    &::-webkit-slider-runnable-track {
+      height: 8px;
+      background: rgba(0, 0, 0, 0.15);
+      border-radius: 8px;
+      width: 100%;
+      cursor: pointer;
+    }
   }
 }

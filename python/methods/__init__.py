@@ -24,7 +24,8 @@ config = {
 def jsonify_category(c, keys=['title', 'types']):
   return {key: (jsonify_types(c[key]) if key == 'types' else c[key]) for key in keys}
 
-def jsonify_types(types, keys=['title']):
-  return [{**{key: types[type_key][key] for key in keys}, '_id': type_key} for type_key in types]
+def jsonify_types(types, keys=['title', 'parameters']):
+  keys 
+  return [{**{key: types[type_key].get(key) for key in keys}, '_id': type_key} for type_key in types]
 
 json_config = [{**jsonify_category(config[c]), '_id': c} for c in config];
