@@ -6,6 +6,7 @@ import Hyperparameters from "./Hyperparameters";
 interface Props {
   catagories: any;
   dataSet?: DataSet;
+  setMethodPath: (path: string) => void;
 }
 
 function Methods(props: Props) {
@@ -31,7 +32,11 @@ function Methods(props: Props) {
     }
   }, [catagory, props.dataSet, props.catagories]);
 
-  //TODO: Support hyperparameters
+  useEffect(() => {
+    if (!methods) return;
+    const method = methods.types[selectedMethodIDX];
+    props.setMethodPath(`${methods._id}/${method._id}`);
+  }, [selectedMethodIDX, methods, props]);
 
   if (!methods) return <></>;
   const method = methods.types[selectedMethodIDX];
@@ -54,7 +59,7 @@ function Methods(props: Props) {
           selectedIDX={selectedMethodIDX}
           onSelect={setSelectedMethodIDX}
         />
-        <div className="button">+</div>
+        <div className="button" id="add-method">+</div>
       </div>
       <div id="main_container">
         <Timeline frames={method.frames}/>

@@ -22,9 +22,68 @@ h4 {
 
 main {
   display: flex;
+}
+
+#main-application {
+  display: flex;
   flex-direction: column;
   width: 100%;
   height: 100vh;
+}
+
+$help-menu-width: 320px;
+#help-menu {
+  background: hsla(211, 100%, 50%, 0.1);//hsl(0, 0%, 94%) 50%;
+  width: 0px;
+  // border-left: 0.5px solid rgba(0, 0, 0, 0.15);
+  overflow-y: scroll;
+  overflow-x: hidden;
+
+  transition: width 0.35s ease-in-out;
+  &.active {
+    width: $help-menu-width;
+  }
+
+  #help-menu-content {
+    width: $help-menu-width;
+    > div {
+      display: inline-block;
+      padding: 0 15px;
+    }
+  }
+
+  .title {
+    font-weight: bold;
+    font-size: 16px;
+    margin-top: 15px;
+  }
+  // Markdown formatting
+  h1 {
+    font-size: 22px;
+  }
+
+  h2 {
+    font-size: 18px;
+  }
+
+  h3 {
+    font-size: 16px;
+  }
+
+  h4 {
+    font-size: 14px;
+  }
+
+  p {
+    margin: 4px 0;
+  }
+  user-select: none;
+}
+
+#help-data-set {
+  height: 193px;
+  width: 100%;
+  background: hsla(211, 100%, 50%, 0.1);//rgba(0, 0, 0, 0.05);
 }
 
 select,
@@ -44,7 +103,7 @@ select,
   margin-top: 8px;
   margin-bottom: 8px;
   height: 27px;
-  line-height: 27px;
+  line-height: 26px;
   color: $blue;
 
   font-weight: bold;
@@ -59,7 +118,7 @@ select,
   &:hover {
     background: rgba(0, 0, 0, 0.02);
   }
-  &:focus, &:active {
+  &:focus, &:active, &.active {
     background: $blue;
     color: white;
   }
@@ -124,9 +183,13 @@ select,
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 0 15px;
+  margin: 0 8px;
   .button {
+    height: 27px;
+    width: 27px;
+    line-height: 27px;
     margin: 8px;
+    padding: 0;
     // border: none;
     // background: transparent;
     // color: black;
@@ -134,22 +197,25 @@ select,
     //   color: $blue;
     // }
     border-radius: 27px;
-
-    &:last-of-type {
-      margin-right: 0;
-    }
+    margin-right: 0;
   }
 
   h3 {
-    margin: 0 !important;
+    margin: 0;
+    margin-left: 15px - 8px !important;
   }
 }
 
-#dataset-add {
+#datasets-navbar-buttons {
+  display: flex;
+}
+
+#dataset-add,  #add-method {
   height: 27px;
   width: 27px;
   padding: 0;
-
+  border-radius: 27px;
+  line-height: 25px !important;
 }
 
 #datasets {
@@ -164,9 +230,9 @@ select,
   flex-grow: 0;
   flex-shrink: 0;
   width: $thumbnail_size * 1.5;
-  text-align: center;
   display: flex;
   flex-direction: column;
+  align-items: center;
 
   .ScrollView {
     margin-top: 15px - 8px;
@@ -183,6 +249,7 @@ select,
   }
 
   select {
+    width: calc(100% - 30px);
     margin: 15px;
     margin-top: 12px;
     margin-bottom: 4px;
