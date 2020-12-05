@@ -5,8 +5,9 @@ import Pause from "./assets/pause.svg";
 
 const STEP = 0.01;
 const FRAME_RATE = 60;
-const PLAYBACK_SPEED = 1;
 const FRAME_RATE_MS = 1000 / FRAME_RATE;
+const MIN_SPEED = 0.25;
+const MAX_SPEED = 2;
 
 interface Props {
   frames: any[]; // An array of values
@@ -18,6 +19,8 @@ function TimeLine(props: Props) {
     step: false,
     currentFrame: 0,
   });
+
+  const [speed, setSpeed] = useState(1);
 
   const frameCount = props.frames.length - 1;
   const interval = useRef(null);
@@ -45,7 +48,7 @@ function TimeLine(props: Props) {
     if (!interval.current) {
       interval.current = setInterval(() => {
         setState((state: any) => {
-          let currentFrame = state.currentFrame + PLAYBACK_SPEED / FRAME_RATE;
+          let currentFrame = state.currentFrame + speed / FRAME_RATE;
           let stop = currentFrame > frameCount;
           if (!stop && state.step && Math.floor(state.currentFrame) !== Math.floor(currentFrame)) {
             currentFrame = Math.floor(currentFrame);
@@ -69,7 +72,7 @@ function TimeLine(props: Props) {
     }
 
     return clear;
-  }, [state.playing, state.step]);
+  }, [state.playing, state.step, speed, frameCount]);
 
   return (
     <div className="timeline">
@@ -113,6 +116,10 @@ function TimeLine(props: Props) {
             }));
           }}
         />
+
+      <div className="timeline-step" id="timeline-speed" onClick={()=> {
+        setSpeed(oldSpeed => MIN_SPEED + ((oldSpeed - MIN_SPEED) + 0.25) % (MAX_SPEED))
+        }}>{speed}x</div>
       </div>
       )}
     </div>
