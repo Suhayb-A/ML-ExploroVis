@@ -23,7 +23,7 @@ def KNeighbors(data, args):
 '''
 method_id : {
   title: 'Method title",
-  args: [inputs.Range(arg_id, ...), ...],
+  parameters: [inputs.Range(arg_id, ...), ...],
   algorithm:
     A function that takes in the (data: pd.dataframe, args:
     hyperparameters).

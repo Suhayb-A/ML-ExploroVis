@@ -14,7 +14,7 @@ def basic(func):
 '''
 method_id : {
   title: 'Method title",
-  args: [inputs.Range(arg_id, ...), ...],
+  parameters: [inputs.Range(arg_id, ...), ...],
   algorithm:
     A function that takes in the (data: pd.dataframe, args:
     hyperparameters).
@@ -30,7 +30,7 @@ method_id : {
 methods = {
   'DBSCAN': {
     'title': 'DBSCAN',
-    'args': [inputs.Range('eps', 'Search Radius', 0.25, 0.1, 1)],
+    'parameters': [inputs.Range('eps', 'Search Radius', 0.25, 0.1, 1)],
     'algorithm': basic(cluster.DBSCAN)
   }
 }
