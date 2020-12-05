@@ -35,6 +35,20 @@ x,y,g
 **Note:** *Colors are assigned using the 'g' column. 'g' values should be
 positive integers, **'g' values of '-1's are uncolored.***
 
+## Help Panel
+
+The help panel presents the contents of the markdown files located at the
+following directories:
+
+* Data Set: `python/data/{Selected Data Set File Name}.md`
+* Method: `python/methods/{selected_method_category_id}/{selected_method_id}.md`
+
+When markdown files are not available for the selected data set or method the
+default markdown files will be used.
+
+* `python/data/default.md`
+* `python/methods/default.md`
+
 ## Run
 
 1. Install [Node.js](https://nodejs.org/en/).

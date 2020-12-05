@@ -68,7 +68,7 @@ function App() {
           />
         </div>
         <div id="data_vis">
-          <Methods catagories={methodTypes} dataSet={dataSet} setMethodPath={setMethodPath}/>
+          <Methods categories={methodTypes} dataSet={dataSet} setMethodPath={setMethodPath}/>
         </div>
       </div>
       <Help
