@@ -3,7 +3,7 @@ from methods import inputs;
 
 def basic(func):
   def inner(data, args):
-    results = cluster.DBSCAN(**args).fit(data.loc[:, ['x', 'y']])
+    results = func(**args).fit(data.loc[:, ['x', 'y']])
     data['cluster'] = results.labels_
     return [{
       'scatter': data.to_dict('records')

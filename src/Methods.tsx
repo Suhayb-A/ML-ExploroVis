@@ -4,42 +4,34 @@ import Timeline from "./components/Timeline";
 import { DataSet } from "./data";
 import Hyperparameters from "./Hyperparameters";
 interface Props {
-  catagories: any;
+  categories: any;
   dataSet?: DataSet;
   setMethodPath: (path: string) => void;
 }
 
 function Methods(props: Props) {
-  const [catagory, setCatagory] = useState(0);
+  const [category, setcategory] = useState(0);
   const [selectedMethodIDX, setSelectedMethodIDX] = useState(0);
   const [methods, setMethods] = useState(undefined);
 
   useEffect(() => {
-    if (!props.catagories || !props.dataSet || !props.catagories[catagory])
+    if (!props.categories || !props.dataSet || !props.categories[category])
       return;
-    const methods = props.catagories[catagory];
+    const methods = props.categories[category];
     const dataSet = props.dataSet;
     for (const i in methods.types) {
       compute(dataSet.csv, methods._id, methods.types[i]._id).then((frames) => {
         setMethods(() => {
           // Make sure that the data set is the same
           if (dataSet !== props.dataSet) return;
-          const methods = props.catagories[catagory];
-          frames = [frames[0], {scatter: [...((frames[0] as any).scatter)]}, frames[0]];
-          frames[1].scatter = frames[1].scatter.map(d => {
-            return {
-              x: 0.5,
-              y: 0.5,
-              g: d['g'] + 1
-            }
-          });
+          const methods = props.categories[category];
 
           methods.types[i] = { ...methods.types[i], frames };
           return { ...methods };
         });
       });
     }
-  }, [catagory, props.dataSet, props.catagories]);
+  }, [category, props.dataSet, props.categories]);
 
   useEffect(() => {
     if (!methods) return;
@@ -54,12 +46,12 @@ function Methods(props: Props) {
     <>
       <div id="method">
         <select
-          value={catagory}
-          onChange={(event) => setCatagory(Number(event.target.value))}
+          value={category}
+          onChange={(event) => setcategory(Number(event.target.value))}
         >
-          {props.catagories.map((catagory, idx) => (
-            <option value={idx} key={catagory._id}>
-              {catagory.title}
+          {props.categories.map((category, idx) => (
+            <option value={idx} key={category._id}>
+              {category.title}
             </option>
           ))}
         </select>
@@ -78,9 +70,9 @@ function Methods(props: Props) {
   );
 }
 
-async function compute(csvData, catagoryID, methodID) {
+async function compute(csvData, categoryID, methodID) {
   const response = await fetch(
-    `http://127.0.0.1:4242/compute/${catagoryID}/${methodID}`,
+    `http://127.0.0.1:4242/compute/${categoryID}/${methodID}`,
     {
       method: "POST",
       headers: {
