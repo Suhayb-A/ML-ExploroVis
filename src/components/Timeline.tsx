@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Graph from "./Plot";
-import Play from "./assets/play.svg";
-import Pause from "./assets/pause.svg";
+import Play from "../assets/play.svg";
+import Pause from "../assets/pause.svg";
 
 const STEP = 0.01;
 const FRAME_RATE = 60;
