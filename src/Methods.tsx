@@ -63,6 +63,10 @@ function Methods(props: Props) {
   }, [selectedMethodIDX, methods, props]);
 
   useEffect(() => {
+    setSelectedMethodIDX(0);
+  }, [category]);
+
+  useEffect(() => {
     // Reinitalize the paramiters
     if (!methods) return;
     const method = methods.types[selectedMethodIDX];
