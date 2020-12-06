@@ -111,6 +111,7 @@ function Methods(props: Props) {
           selectedIDX={selectedMethodIDX}
           onSelect={setSelectedMethodIDX}
         />
+
         <Popup
           trigger={
             <div className="button" id="add-method">
@@ -128,6 +129,7 @@ function Methods(props: Props) {
             />
           )}
         </Popup>
+
       </div>
       <div id="main_container">
         <Timeline frames={method.frames} />
