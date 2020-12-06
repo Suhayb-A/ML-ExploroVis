@@ -3,6 +3,8 @@ import ScrollView from "./components/ScrollView";
 import Timeline from "./components/Timeline";
 import { DataSet } from "./data";
 import Hyperparameters from "./Hyperparameters";
+import Popup from "reactjs-popup";
+import ModelEditor from "./ModelEditor";
 
 interface Props {
   categories: any;
@@ -23,17 +25,20 @@ function Methods(props: Props) {
 
     const i = index;
     const method = methods.types[i];
-    const args = method.parameters ? method.parameters.reduce((r, v) => {
-      r[v["_id"]] = v["value"]["value"];
-      return r;
-    }, {}) : {};
+    const args = method.parameters
+      ? method.parameters.reduce((r, v) => {
+          r[v["_id"]] = v["value"]["value"];
+          return r;
+        }, {})
+      : {};
 
     const dataSet = props.dataSet;
-    const parameters = method.parameters;
+    const parameters = method.parameters;
     compute(dataSet.csv, methods._id, method._id, args).then((frames) => {
       setMethods(() => {
         // Make sure that the state did not change.
-        if (dataSet !== props.dataSet || parameters !== method.parameters) return;
+        if (dataSet !== props.dataSet || parameters !== method.parameters)
+          return;
 
         const methods = props.categories[category];
         methods.types[i] = { ...methods.types[i], frames };
@@ -68,6 +73,22 @@ function Methods(props: Props) {
   if (!methods) return <></>;
   const method = methods.types[selectedMethodIDX];
 
+  function addMethod(newMethod: { _id: string; title: string }) {
+    // Get the method.
+    let method = props.categories[category].types.find((type) => type._id === newMethod._id);
+    const newtype = { ...method, title: newMethod.title };
+    newtype.frames = [...newtype.frames];
+    // Reset the parameters to their default values.
+    newtype.parameters = newtype.parameters.map((parameter) => ({
+      ...parameter,
+      value: { ...parameter.value, value: parameter.value.default },
+    }));
+    props.categories[category].types = [...props.categories[category].types, newtype];
+
+    // Recompute
+    computeMethod(props.categories[category].types.length - 1);
+  }
+
   return (
     <>
       <div id="method">
@@ -86,9 +107,23 @@ function Methods(props: Props) {
           selectedIDX={selectedMethodIDX}
           onSelect={setSelectedMethodIDX}
         />
-        <div className="button" id="add-method">
-          +
-        </div>
+        <Popup
+          trigger={
+            <div className="button" id="add-method">
+              +
+            </div>
+          }
+          modal
+          closeOnDocumentClick={false}
+        >
+          {(close) => (
+            <ModelEditor
+              close={close}
+              methods={props.categories[category]}
+              onAdd={addMethod}
+            />
+          )}
+        </Popup>
       </div>
       <div id="main_container">
         <Timeline frames={method.frames} />
@@ -96,7 +131,7 @@ function Methods(props: Props) {
           title={method.title}
           parameters={parameters}
           setParameters={(param) => {
-            setParameters(param)
+            setParameters(param);
             // Recompute the current model.
             computeMethod(selectedMethodIDX);
           }}

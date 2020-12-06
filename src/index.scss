@@ -423,3 +423,70 @@ input:not([type="range"]),
     }
   }
 }
+
+.model-editor {
+  width: 400px;
+  background: white;
+  padding-top: 15px;
+  display: flex;
+  flex-direction: column;
+  h1 {
+    font-size: 22px;
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 15px;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 8px;
+    margin-left: 15px;
+    margin-right: 15px;
+  }
+
+  input, select {
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-bottom: 8px;
+  }
+}
+
+.model-editor-buttons {
+  padding-top: 15px - 8px;
+  display: flex;
+  width: 100%;
+  height: 44px;
+  text-align: center;
+  > div {
+    background: rgba(0, 0, 0, 0.1);
+    width: 50%;
+    line-height: 44px;
+    font-weight: bolder;
+    cursor: pointer;
+    user-select: none;
+    &:hover {
+      background: rgba(0, 122, 255, 0.25);
+    }
+    &:active {
+      background: $blue;
+      color: white;
+    }
+    &:first-of-type {
+      color: red;
+      border-right: 1px solid rgba(0, 0, 0, 0.1);
+      &:hover {
+        background: rgba(255, 0, 0, 0.25);
+      }
+      &:active {
+        background: red;
+        color: white;
+      }
+    }
+  }
+}
+
+
+.popup-overlay {
+  outline: none;
+  background: rgba(0, 0, 0, 0.75);
+}
