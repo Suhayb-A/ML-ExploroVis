@@ -18,8 +18,20 @@ function ModelEditor({ methods, close, onAdd }: Props) {
     types[type._id] = type.title;
   });
 
+  function add() {
+    if (!state.title) {
+      state.title =
+        "unnamed" + (UNNAMED_COUNTER++ === -1 ? "" : "_" + UNNAMED_COUNTER);
+    }
+    onAdd(state);
+    close();
+  }
+
   return (
-    <div className="model-editor">
+    <form className="model-editor" onSubmit={e => {
+      e.preventDefault();
+      add();
+    }}>
       <h1>Add {methods.title} Method</h1>
       <label>Model Name</label>
       <input
@@ -43,21 +55,9 @@ function ModelEditor({ methods, close, onAdd }: Props) {
       </select>
       <div className="model-editor-buttons">
         <div onClick={close}>Cancel</div>
-        <div
-          onClick={() => {
-            if (!state.title) {
-              state.title =
-                "unnamed" +
-                (UNNAMED_COUNTER++ === -1 ? "" : "_" + UNNAMED_COUNTER);
-            }
-            onAdd(state);
-            close();
-          }}
-        >
-          Add
-        </div>
+        <div onClick={add}>Add</div>
       </div>
-    </div>
+    </form>
   );
 }
 
