@@ -12,16 +12,56 @@ Default data structure:
 config = {
   'cluster': {
     'title': 'Cluster',
-    'types': cluster.methods
+    'types': cluster.methods,
+    'colors': [
+      {
+        '_id': 'cluster',
+        'title': 'Cluster',
+        'values': [{
+            'title': 'Not clustered',
+            'value': -1
+          },{
+            'title': 'Cluster 1',
+            'value': 0
+          },{
+            'title': 'Cluster 2',
+            'value': 1
+          }]
+      }
+    ]
   },
   'classify': {
     'title': 'Classify',
-    'types': classify.methods
+    'types': classify.methods,
+    'colors': [
+      {
+        '_id': 'prediction',
+        'title': 'Prediction',
+        'values': [{
+            'title': 'Cluster 1',
+            'value': 0
+          },{
+            'title': 'Cluster 2',
+            'value': 1
+          }]
+      },
+      {
+        '_id': 'correct',
+        'title': 'Correctness',
+        'values': [{
+            'title': 'Correct',
+            'value': 0
+          },{
+            'title': 'Incorrect',
+            'value': 1
+          }]
+      }
+    ]
   }
 }
 
 # Json
-def jsonify_category(c, keys=['title', 'types']):
+def jsonify_category(c, keys=['title', 'types', 'colors']):
   return {key: (jsonify_types(c[key]) if key == 'types' else c[key]) for key in keys}
 
 def jsonify_types(types, keys=['title', 'parameters']):

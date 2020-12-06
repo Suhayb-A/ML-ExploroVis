@@ -54,7 +54,17 @@ function Hyperparameters({
                     })}
                   </Input>
                 ) : (
-                  <Input {...param.value} onChange={onChange} />
+                  <div className="hyperparameter-option-group">
+                    <Input {...param.value} onChange={onChange} />
+                    {param.value.type == "range" && (
+                      <Input
+                        className="hyperparameter-option-secondary"
+                        {...param.value}
+                        type="number"
+                        onChange={onChange}
+                      />
+                    )}
+                  </div>
                 )}
               </React.Fragment>
             );

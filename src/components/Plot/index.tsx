@@ -5,7 +5,7 @@ import Scatter from "./Scatter";
 const PADDING = 8;
 export const COLORS = ["black", ...d3.schemeCategory10];
 
-function getColor(index: number | string) {
+export function getColor(index: number | string) {
   // Offest the index so that -1 would be black.
   return COLORS[Number(index) + 1];
 }

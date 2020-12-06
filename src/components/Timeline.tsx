@@ -11,6 +11,7 @@ const MAX_SPEED = 2;
 
 interface Props {
   frames: any[]; // An array of values
+  colorOn?: string;
 }
 
 function TimeLine(props: Props) {
@@ -76,7 +77,7 @@ function TimeLine(props: Props) {
 
   return (
     <div className="timeline">
-      <Graph frames={props.frames} responsive={true} t={state.currentFrame}/>
+      <Graph frames={props.frames} responsive={true} t={state.currentFrame} colorOn={props.colorOn}/>
 
       {frameCount > 0 && (
       <div className="timeline-controls">
