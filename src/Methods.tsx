@@ -83,10 +83,10 @@ function Methods(props: Props) {
     const newtype = { ...method, title: newMethod.title };
     newtype.frames = [...newtype.frames];
     // Reset the parameters to their default values.
-    newtype.parameters = newtype.parameters.map((parameter) => ({
+    newtype.parameters = newtype.parameters ? newtype.parameters.map((parameter) => ({
       ...parameter,
       value: { ...parameter.value, value: parameter.value.default },
-    }));
+    })): null;
     props.categories[category].types = [...props.categories[category].types, newtype];
 
     // Recompute
