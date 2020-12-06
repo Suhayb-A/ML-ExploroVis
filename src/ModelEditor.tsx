@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-let UNNAMED_COUNTER = -1;
+let UNNAMED_COUNTER = {};
 
 export interface Props {
   methods: any;
@@ -20,8 +20,9 @@ function ModelEditor({ methods, close, onAdd }: Props) {
 
   function add() {
     if (!state.title) {
+      if (!UNNAMED_COUNTER[state._id]) UNNAMED_COUNTER[state._id] = 1;
       state.title =
-        "unnamed" + (UNNAMED_COUNTER++ === -1 ? "" : "_" + UNNAMED_COUNTER);
+        `${types[state._id]}_${UNNAMED_COUNTER[state._id]++}`;
     }
     onAdd(state);
     close();
