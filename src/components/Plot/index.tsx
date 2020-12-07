@@ -2,7 +2,7 @@ import React, { createRef } from "react";
 import * as d3 from "d3";
 import Scatter from "./Scatter";
 
-const PADDING = 8;
+export const PADDING = 8;
 export const COLORS = ["black", ...d3.schemeCategory10];
 
 export function getColor(index: number | string) {
@@ -13,7 +13,6 @@ export function getColor(index: number | string) {
 export interface Props {
   frames: any;
   responsive?: boolean;
-  radius?: number;
   colorOn?: string;
   thumbnail?: boolean;
   t?: number;
@@ -25,7 +24,6 @@ class Base extends React.Component<Props> {
 
   static defaultProps = {
     responsive: false,
-    radius: 2,
     colorOn: "g",
   };
 

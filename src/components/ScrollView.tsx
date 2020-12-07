@@ -6,6 +6,7 @@ interface Props {
   items: any[];
   selectedIDX?: number;
   children?: React.ReactNode;
+  colorOn?: string;
   onSelect?: (idx: number) => void;
 }
 
@@ -19,6 +20,7 @@ function ScrollView(props: Props) {
           item={item}
           selected={props.selectedIDX === idx}
           onClick={() => props.onSelect && props.onSelect(idx)}
+          colorOn={props.colorOn}
         />
       ))}
     </div>
@@ -33,13 +35,14 @@ function BoxView(props: {
   item: any;
   idx: number;
   selected: boolean;
+  colorOn?: string;
   onClick?: () => void;
 }) {
   const menu = Menu.buildFromTemplate([
     {
       label: "Delete",
       enabled: !!props.item.delete,
-      click: () => props.item.delete(props.idx),
+      click: () => props.item.delete(props.idx, props.selected),
     },
   ]);
 
@@ -55,7 +58,7 @@ function BoxView(props: {
       onClick={props.onClick}
     >
       <div className="ScrollView-thumbnail">
-        <Graph frames={props.item.frames} thumbnail={true} />
+        <Graph frames={props.item.frames} thumbnail={true} colorOn={props.colorOn}/>
       </div>
       <div className="ScrollView-label">{props.item.title}</div>
     </div>

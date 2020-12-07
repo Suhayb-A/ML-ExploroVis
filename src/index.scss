@@ -8,6 +8,14 @@ body {
   user-select: none;
 }
 
+.caption {
+  color: gray;
+  text-align: left;
+  padding: 15px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
 h1,
 h2,
 h3,
@@ -538,10 +546,101 @@ input:not([type="range"]),
       }
     }
   }
+
+  .disabled {
+    user-select: none;
+    pointer-events: none;
+    opacity: 0.4;
+  }
 }
 
 
 .popup-overlay {
   outline: none;
   background: rgba(0, 0, 0, 0.75);
+}
+
+
+.data-set-editor {
+  background: white;
+  display: flex;
+  flex-direction: column;
+  width: 95vw;
+  height: 95vh;
+
+  .data-set-editor-content {
+    padding: 15px;
+  }
+
+  .model-editor-buttons {
+    width: auto;
+    padding: 15px;
+    justify-content: space-between;
+
+    > div {
+      border: 0;
+      width: 100px;
+    }
+  }
+  label {
+    padding-right: 8px;
+    font-weight: bolder;
+  }
+
+  h2 {
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 15px;
+  }
+}
+
+.data-set-editor-scatter-container {
+  flex-grow: 1;
+  background: hsl(0, 0%, 97%);
+  border: 1px solid hsl(0, 0%, 97%);
+  display: flex;
+  
+  svg {
+    flex-grow: 1;
+    background: white;
+  }
+}
+
+.data-set-editor-side-panel {
+  width: 44px;
+  display: flex;
+  padding: 8px 0;
+  flex-direction: column;
+
+  .data-set-editor-cluster-color {
+    width: 24px;
+    height: 24px;
+    border-radius: 24px;
+    margin: (44px - 24px) * 0.5;
+    cursor: pointer;
+
+    &.active, &:active {
+      width: 32px;
+      height: 32px;
+      border-radius: 32px;
+      margin: (44px - 32px) * 0.5;
+    }
+  }
+  
+  .icon {
+    mask-repeat: no-repeat;
+    mask-size: 100% auto;
+    background: black;
+    border-radius: 0;
+    width: 24px;
+    height: 24px;
+    margin: (44px - 24px) * 0.5;
+    cursor: pointer;
+    &:hover {
+      background: rgba(0, 122, 255, 0.85);
+    }
+    &:active {
+      background: $blue;
+    }
+  }
 }

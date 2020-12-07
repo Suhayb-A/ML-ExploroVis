@@ -97,7 +97,9 @@ function Methods(props: Props) {
       : null;
 
     // Enable deletion
-    newtype["delete"] = (idx: number) => {
+    newtype["delete"] = (idx: number, selected) => {
+      if (selected) setSelectedMethodIDX(0);
+
       props.categories[category].types.splice(idx, 1);
 
       // Reset methods to prepetuate updates.
@@ -141,7 +143,7 @@ function Methods(props: Props) {
             </select>
           )}
           {methods.colors[colorOn].values.map((color) => (
-            <div className="legend-color">
+            <div key={color.value} className="legend-color">
               <div style={{ background: getColor(color.value) }} />
               {color.title}
             </div>
@@ -151,6 +153,7 @@ function Methods(props: Props) {
           items={methods.types}
           selectedIDX={selectedMethodIDX}
           onSelect={setSelectedMethodIDX}
+          colorOn={methods.colors[colorOn]._id}
         />
         <Popup
           trigger={
