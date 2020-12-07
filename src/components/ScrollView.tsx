@@ -1,6 +1,6 @@
-import React, {useEffect, useRef} from "react";
+import React, { useEffect, useRef } from "react";
 import Graph from "./Plot";
-const {Menu, getCurrentWindow} = window.require("electron").remote;
+const { Menu, getCurrentWindow } = window.require("electron").remote;
 
 interface Props {
   items: any[];
@@ -38,16 +38,16 @@ function BoxView(props: {
   const menu = Menu.buildFromTemplate([
     {
       label: "Delete",
-      enabled: !(!props.item.delete),
-      click: () => props.item.delete(props.idx)
-    }
+      enabled: !!props.item.delete,
+      click: () => props.item.delete(props.idx),
+    },
   ]);
 
   return (
     <div
-      onContextMenu={e => {
+      onContextMenu={(e) => {
         e.preventDefault();
-        menu.popup(getCurrentWindow())
+        menu.popup(getCurrentWindow());
       }}
       className={
         "ScrollView-item selectable" + (props.selected ? " selected" : "")

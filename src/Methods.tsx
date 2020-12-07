@@ -97,11 +97,11 @@ function Methods(props: Props) {
       : null;
 
     // Enable deletion
-    newtype['delete'] = (idx: number) => {
+    newtype["delete"] = (idx: number) => {
       props.categories[category].types.splice(idx, 1);
 
       // Reset methods to prepetuate updates.
-      setMethods(methods => ({...methods}))
+      setMethods((methods) => ({ ...methods }));
     };
 
     props.categories[category].types = [
@@ -171,7 +171,10 @@ function Methods(props: Props) {
         </Popup>
       </div>
       <div id="main_container">
-        <Timeline frames={method.frames} colorOn={methods.colors[colorOn]._id}/>
+        <Timeline
+          frames={method.frames}
+          colorOn={methods.colors[colorOn]._id}
+        />
         <Hyperparameters
           title={method.title}
           parameters={parameters}
