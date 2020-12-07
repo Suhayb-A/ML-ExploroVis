@@ -17,16 +17,7 @@ config = {
       {
         '_id': 'cluster',
         'title': 'Cluster',
-        'values': [{
-            'title': 'Not Clustered',
-            'value': -1
-          },{
-            'title': 'Cluster 1',
-            'value': 0
-          },{
-            'title': 'Cluster 2',
-            'value': 1
-          }]
+        # colors are assigned on the client side.
       }
     ]
   },

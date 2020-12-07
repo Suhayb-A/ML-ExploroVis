@@ -44,6 +44,31 @@ function Methods(props: Props) {
 
         const methods = props.categories[category];
         methods.types[i] = { ...methods.types[i], frames };
+        if (methods._id === "cluster") {
+          // Update cluster colors
+          const colorValues = [
+            {
+              title: "Not Clustered",
+              value: -1,
+            },
+          ];
+          const max = methods.types[i].frames.reduce((max, frame) => {
+            return Math.max(
+              max,
+              ...frame.scatter.map((d) => d[methods.colors[0]._id])
+            );
+          }, -1);
+
+          for (let i = 0; i <= max; i++) {
+            colorValues.push({
+              title: `Cluster ${i + 1}`,
+              value: i,
+            });
+          }
+          methods.types[i].colors = {
+            values: colorValues,
+          };
+        }
         return { ...methods };
       });
     });
@@ -98,7 +123,7 @@ function Methods(props: Props) {
 
     // Enable deletion
     newtype["delete"] = (idx: number) => {
-      setSelectedMethodIDX(oldIDX => oldIDX >= idx ? oldIDX - 1 : oldIDX);
+      setSelectedMethodIDX((oldIDX) => (oldIDX >= idx ? oldIDX - 1 : oldIDX));
 
       props.categories[category].types.splice(idx, 1);
 
@@ -114,7 +139,11 @@ function Methods(props: Props) {
     // Recompute
     computeMethod(props.categories[category].types.length - 1);
   }
-
+  const colorsValues =
+    methods.colors[colorOn]._id === "cluster"
+      ? method.colors.values
+      : methods.colors[colorOn].values;
+  console.log(colorsValues);
   return (
     <>
       <div id="method">
@@ -142,7 +171,7 @@ function Methods(props: Props) {
               ))}
             </select>
           )}
-          {methods.colors[colorOn].values.map((color) => (
+          {colorsValues.map((color) => (
             <div key={color.value} className="legend-color">
               <div style={{ background: getColor(color.value) }} />
               {color.title}
