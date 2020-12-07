@@ -98,7 +98,7 @@ function Methods(props: Props) {
 
     // Enable deletion
     newtype['delete'] = (idx: number) => {
-      props.categories[category].types = props.categories[category].types.splice(idx, 1);
+      props.categories[category].types.splice(idx, 1);
 
       // Reset methods to prepetuate updates.
       setMethods(methods => ({...methods}))
