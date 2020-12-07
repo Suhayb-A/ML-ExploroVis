@@ -18,7 +18,7 @@ config = {
         '_id': 'cluster',
         'title': 'Cluster',
         'values': [{
-            'title': 'Not clustered',
+            'title': 'Not Clustered',
             'value': -1
           },{
             'title': 'Cluster 1',

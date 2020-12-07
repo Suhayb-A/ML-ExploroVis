@@ -95,6 +95,15 @@ function Methods(props: Props) {
           value: { ...parameter.value, value: parameter.value.default },
         }))
       : null;
+
+    // Enable deletion
+    newtype['delete'] = (idx: number) => {
+      props.categories[category].types = props.categories[category].types.splice(idx, 1);
+
+      // Reset methods to prepetuate updates.
+      setMethods(methods => ({...methods}))
+    };
+
     props.categories[category].types = [
       ...props.categories[category].types,
       newtype,
@@ -103,7 +112,6 @@ function Methods(props: Props) {
     // Recompute
     computeMethod(props.categories[category].types.length - 1);
   }
-  console.log(methods);
 
   return (
     <>
