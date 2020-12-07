@@ -4,27 +4,33 @@ from matplotlib import pyplot as plt
 from sklearn.cluster import KMeans, SpectralClustering, DBSCAN
 
 def generateCluster(clusterName, data, args):
-	args['max_iter'] = 1
 	if clusterName == 'Spectral':
+		args['max_iter'] = 1
 		cluster = SpectralClustering(**args)
 		trainable = True
 	if clusterName == 'DBSCAN':
 		cluster = DBSCAN(**args)
-		trainable = True
+		trainable = False
 	if clusterName == 'KMeans':
+		args['max_iter'] = 1
 		cluster = KMeans(**args)
 		trainable = True
-	return generateStats(cluster, data)
+	return generateStats(cluster, data, trainable)
 
-def generateStats(cluster, data):
+def generateStats(cluster, data, trainable):
 	clusters = []
 	boundary = []
-	for i in range(30):
-		for j in range(5):
-			cluster.fit(data)
-		intermediateClusters = cluster.predict(data)
-		clusters.append((data, intermediateClusters))
-		boundary.append(generateNaiveBoundary(cluster, data))
+	if trainable:
+		for i in range(30):
+			for j in range(5):
+				cluster.fit(data)
+			intermediateClusters = cluster.predict(data)
+			clusters.append((data, intermediateClusters))
+			boundary.append(generateNaiveBoundary(cluster, data))
+	else:
+		clusters.append(cluster.fit_predict(data))
+		#boundary.append(generateNaiveBoundary(cluster, data))
+		boundary = [None] * len(clusters)
 	return clusters, boundary
 
 def generateNaiveBoundary(model, X):
@@ -42,7 +48,15 @@ def generateNaiveBoundary(model, X):
 	boundary = []
 	for i in range(len(xxl)-1):
 		for j in range(len(xxl[0])-1):
-			boundaryIndicies[i*len(xxl)+j] = 1 if (Z[i,j] != Z[i,j+1] or Z[i,j] != Z[i+1,j]) else 0
+			try:
+				boundaryIndicies[i*len(xxl)+j] = 1 if (Z[i,j] != Z[i,j+1] or Z[i,j] != Z[i+1,j]) else 0
+			except:
+				print(len(boundaryIndicies))
+				print(Z.shape)
+				print(i)
+				print(j)
+				print(len(xxl))
+				input(len(xxl[0]))
 	for i in range(len(boundaryIndicies)):
 		if boundaryIndicies[i] == 1:
 			boundary.append(mesh[i])

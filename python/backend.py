@@ -22,4 +22,4 @@ def generateClusterDataframe(cluster, args, datasetName, noise):
 
 if __name__ == "__main__":
 	print(generateClassifierDataframe('Artificial Neural Network', {'hidden_layer_sizes':(32, 16), 'activation':'relu', 'alpha':0.01}, 'Circles', 0.03))
-	print(generateClusterDataframe('KMeans', {'n_clusters': 2}, 'Circles', 0.03))
+	print(generateClusterDataframe('DBSCAN', {'eps': 0.2}, 'Circles', 0.03))
