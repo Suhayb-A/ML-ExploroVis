@@ -42,7 +42,7 @@ function BoxView(props: {
     {
       label: "Delete",
       enabled: !!props.item.delete,
-      click: () => props.item.delete(props.idx, props.selected),
+      click: () => props.item.delete(props.idx),
     },
   ]);
 

@@ -44,8 +44,8 @@ function App() {
   }, [helpActive]);
 
   function addDataSet(newDataSet) {
-    newDataSet["delete"] = (idx, selected) => {
-      if (selected) setSelectedDataIDX(0);
+    newDataSet["delete"] = (idx) => {
+      setSelectedDataIDX(oldIDX => oldIDX >= idx ? oldIDX - 1 : oldIDX);
       setDataSet((datasets) => {
         const newDataSets = [...datasets];
         newDataSets.splice(idx, 1);

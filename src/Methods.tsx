@@ -97,8 +97,8 @@ function Methods(props: Props) {
       : null;
 
     // Enable deletion
-    newtype["delete"] = (idx: number, selected) => {
-      if (selected) setSelectedMethodIDX(0);
+    newtype["delete"] = (idx: number) => {
+      setSelectedMethodIDX(oldIDX => oldIDX >= idx ? oldIDX - 1 : oldIDX);
 
       props.categories[category].types.splice(idx, 1);
 
