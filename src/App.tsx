@@ -3,6 +3,8 @@ import ScrollView from "./components/ScrollView";
 import { loadDefaultDataSets } from "./data";
 import Methods from "./Methods";
 import Help from "./Help";
+import Popup from "reactjs-popup";
+import DataEditor from "./DataEditor";
 
 const fetchRetry = require("fetch-retry")(fetch, {
   retries: 100,
@@ -41,6 +43,18 @@ function App() {
     resizeAnimation();
   }, [helpActive]);
 
+  function addDataSet(newDataSet) {
+    newDataSet["delete"] = (idx, selected) => {
+      if (selected) setSelectedDataIDX(0);
+      setDataSet((datasets) => {
+        const newDataSets = [...datasets];
+        newDataSets.splice(idx, 1);
+        return newDataSets;
+      });
+    };
+    setDataSet((datasets) => [...datasets, newDataSet]);
+  }
+
   const dataSet = dataSets[selectedDataIDX];
   return (
     <main>
@@ -49,9 +63,17 @@ function App() {
           <div id="datasets-navbar">
             <h3>Data Sets</h3>
             <div id="datasets-navbar-buttons">
-              <div className="button" id="dataset-add">
-                +
-              </div>
+              <Popup
+                trigger={
+                  <div className="button" id="dataset-add">
+                    +
+                  </div>
+                }
+                modal
+                closeOnDocumentClick={false}
+              >
+                {(close) => <DataEditor close={close} onAdd={addDataSet} />}
+              </Popup>
               <div
                 className={"button" + (helpActive ? " active" : "")}
                 id="dataset-help"
@@ -68,7 +90,11 @@ function App() {
           />
         </div>
         <div id="data_vis">
-          <Methods categories={methodTypes} dataSet={dataSet} setMethodPath={setMethodPath}/>
+          <Methods
+            categories={methodTypes}
+            dataSet={dataSet}
+            setMethodPath={setMethodPath}
+          />
         </div>
       </div>
       <Help
