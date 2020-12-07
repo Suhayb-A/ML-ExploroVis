@@ -256,7 +256,7 @@ input:not([type="range"]),
     width: calc(100% - 30px);
     margin: 15px;
     margin-top: 12px;
-    margin-bottom: 4px;
+    margin-bottom: 0;//4px;
   }
 
   // Top Boarder
@@ -268,6 +268,47 @@ input:not([type="range"]),
     right: 15px;
     left: 15px;
     border-top: 1px solid rgba(0, 0, 0, 0.05);
+  }
+}
+
+#legend {
+  margin-top: 0;
+  padding: 8px 0;
+  padding-bottom: 15px;
+  margin-bottom: 8px;
+  width: calc(100% - 30px);
+  position: relative;
+  &::before {
+    content: " ";
+    position: absolute;
+    bottom: 0;
+    right: 0px;
+    left: 0px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  }
+
+  label {
+    font-weight: bold;
+  }
+
+  select {
+    margin-top: 8px;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .legend-color {
+    padding-top: 8px;
+    div {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      margin-right: 4px;
+      border-radius: 5px;
+    }
   }
 }
 
@@ -421,6 +462,18 @@ input:not([type="range"]),
       width: 100%;
       cursor: pointer;
     }
+  }
+}
+
+.hyperparameter-option-group {
+  display: flex;
+  > input {
+    &:first-of-type {
+      flex-grow: 1;
+    }
+  }
+  .hyperparameter-option-secondary {
+    margin-left: 8px;
   }
 }
 

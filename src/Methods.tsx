@@ -5,6 +5,7 @@ import { DataSet } from "./data";
 import Hyperparameters from "./Hyperparameters";
 import Popup from "reactjs-popup";
 import ModelEditor from "./ModelEditor";
+import { getColor } from "./components/Plot";
 
 interface Props {
   categories: any;
@@ -14,6 +15,7 @@ interface Props {
 
 function Methods(props: Props) {
   const [category, setcategory] = useState(0);
+  const [colorOn, setColorOn] = useState(0);
   const [selectedMethodIDX, setSelectedMethodIDX] = useState(0);
   const [methods, setMethods] = useState(undefined);
   const [parameters, setParameters] = useState(undefined);
@@ -48,6 +50,12 @@ function Methods(props: Props) {
   }
 
   useEffect(() => {
+    // On catagory reset
+    setSelectedMethodIDX(0);
+    setColorOn(0);
+  }, [category]);
+
+  useEffect(() => {
     if (!props.categories || !props.dataSet || !props.categories[category])
       return;
     const methods = props.categories[category];
@@ -63,10 +71,6 @@ function Methods(props: Props) {
   }, [selectedMethodIDX, methods, props]);
 
   useEffect(() => {
-    setSelectedMethodIDX(0);
-  }, [category]);
-
-  useEffect(() => {
     // Reinitalize the paramiters
     if (!methods) return;
     const method = methods.types[selectedMethodIDX];
@@ -79,19 +83,27 @@ function Methods(props: Props) {
 
   function addMethod(newMethod: { _id: string; title: string }) {
     // Get the method.
-    let method = props.categories[category].types.find((type) => type._id === newMethod._id);
+    let method = props.categories[category].types.find(
+      (type) => type._id === newMethod._id
+    );
     const newtype = { ...method, title: newMethod.title };
     newtype.frames = [...newtype.frames];
     // Reset the parameters to their default values.
-    newtype.parameters = newtype.parameters ? newtype.parameters.map((parameter) => ({
-      ...parameter,
-      value: { ...parameter.value, value: parameter.value.default },
-    })): null;
-    props.categories[category].types = [...props.categories[category].types, newtype];
+    newtype.parameters = newtype.parameters
+      ? newtype.parameters.map((parameter) => ({
+          ...parameter,
+          value: { ...parameter.value, value: parameter.value.default },
+        }))
+      : null;
+    props.categories[category].types = [
+      ...props.categories[category].types,
+      newtype,
+    ];
 
     // Recompute
     computeMethod(props.categories[category].types.length - 1);
   }
+  console.log(methods);
 
   return (
     <>
@@ -106,12 +118,32 @@ function Methods(props: Props) {
             </option>
           ))}
         </select>
+        <div id="legend">
+          <label>Color</label>
+          {methods.colors.length > 1 && (
+            <select
+              value={colorOn}
+              onChange={(event) => setColorOn(Number(event.target.value))}
+            >
+              {methods.colors.map((color, idx) => (
+                <option value={idx} key={idx}>
+                  {color.title}
+                </option>
+              ))}
+            </select>
+          )}
+          {methods.colors[colorOn].values.map((color) => (
+            <div className="legend-color">
+              <div style={{ background: getColor(color.value) }} />
+              {color.title}
+            </div>
+          ))}
+        </div>
         <ScrollView
           items={methods.types}
           selectedIDX={selectedMethodIDX}
           onSelect={setSelectedMethodIDX}
         />
-
         <Popup
           trigger={
             <div className="button" id="add-method">
@@ -129,10 +161,9 @@ function Methods(props: Props) {
             />
           )}
         </Popup>
-
       </div>
       <div id="main_container">
-        <Timeline frames={method.frames} />
+        <Timeline frames={method.frames} colorOn={methods.colors[colorOn]._id}/>
         <Hyperparameters
           title={method.title}
           parameters={parameters}
