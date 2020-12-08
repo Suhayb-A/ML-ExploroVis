@@ -12,6 +12,7 @@ from sklearn import cluster, datasets, mixture
 from sklearn.neighbors import kneighbors_graph
 from sklearn.preprocessing import StandardScaler
 from itertools import cycle, islice
+from sklearn.preprocessing import MinMaxScaler
 
 np.random.seed(0)
 
@@ -66,6 +67,6 @@ for i_dataset, (dataset, algo_params) in enumerate(datasets):
         print(datasetName)
         y = np.zeros((X.shape[0]))
     # normalize dataset for easier parameter selection
-    X = StandardScaler().fit_transform(X)
+    X = MinMaxScaler().fit_transform(X)
 
     pd.DataFrame({'x': X[:, 0], 'y': X[:, 1], 'g': y.astype(int)}).to_csv(datasetName + ".csv", index=False)
