@@ -3,6 +3,7 @@ import Graph from "./Plot";
 import Play from "../assets/play.svg";
 import Pause from "../assets/pause.svg";
 
+const SPEED_MULTIPLYER = 2;
 const STEP = 0.01;
 const FRAME_RATE = 60;
 const FRAME_RATE_MS = 1000 / FRAME_RATE;
@@ -49,7 +50,7 @@ function TimeLine(props: Props) {
     if (!interval.current) {
       interval.current = setInterval(() => {
         setState((state: any) => {
-          let currentFrame = state.currentFrame + speed / FRAME_RATE;
+          let currentFrame = state.currentFrame + (speed / FRAME_RATE * SPEED_MULTIPLYER);
           let stop = currentFrame > frameCount;
           if (!stop && state.step && Math.floor(state.currentFrame) !== Math.floor(currentFrame)) {
             currentFrame = Math.floor(currentFrame);
