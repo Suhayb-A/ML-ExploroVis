@@ -14,7 +14,7 @@ export default function draw(
     points
       .attr("d", (data) => d3.line().curve(d3.curveCatmullRom.alpha(0.5))(data))
       .attr("stroke", "rgba(0,0,0,0.15)")
-      .attr('stroke-width', thumbnail ? 2 : 3)
+      .attr('stroke-width', 2)
       .attr('stroke-dasharray', thumbnail ? 1 : 10)
       .attr("fill", "transparent");
   }

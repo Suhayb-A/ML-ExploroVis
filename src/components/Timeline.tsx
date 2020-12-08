@@ -3,7 +3,7 @@ import Graph from "./Plot";
 import Play from "../assets/play.svg";
 import Pause from "../assets/pause.svg";
 
-const SPEED_MULTIPLYER = 2; // MODIFY THE BASE ANIMATION SPEED.
+const SPEED_MULTIPLYER = 4; // MODIFY THE BASE ANIMATION SPEED.
 const STEP = 0.01;
 const FRAME_RATE = 60;
 const FRAME_RATE_MS = 1000 / FRAME_RATE;
