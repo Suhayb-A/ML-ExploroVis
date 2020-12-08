@@ -3,6 +3,7 @@ import { getColor } from "./components/Plot";
 import clear from "./assets/clear.svg";
 import DrawPlot from "./components/DrawPlot";
 import { csvFormat } from "d3";
+const MIN_POINTS = 10;
 
 let UNNAMED_COUNTER = -1;
 const CLUSTERS = [0, 1];
@@ -32,6 +33,10 @@ function DataSetEditor({ close, onAdd }: Props) {
   ];
 
   function add() {
+    if (state.data.length < MIN_POINTS) {
+      alert(`Please add ${MIN_POINTS -state.data.length} or more points`);
+      return;
+    }
     if (!state.title) {
       state.title = `unnamed${
         UNNAMED_COUNTER++ !== -1 ? "_" + UNNAMED_COUNTER : ""
