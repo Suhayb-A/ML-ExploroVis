@@ -3,7 +3,7 @@ import * as d3 from "d3";
 import Scatter from "./Plot/Scatter";
 import { getColor } from "./Plot";
 const PADDING = 0;
-const DRAW_DRAG_GAP_DELAY_MS = 100;
+const DRAW_DRAG_GAP_DELAY_MS = 50;
 interface DataPoint {
   x: number;
   y: number;

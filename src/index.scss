@@ -152,6 +152,10 @@ input:not([type="range"]),
   overflow-x: scroll;
   padding: 8px 0;
   padding-bottom: 15px - 8px;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .ScrollView-item {
@@ -258,6 +262,10 @@ input:not([type="range"]),
 
     .ScrollView-item {
       margin: 0;
+    }
+
+    &::-webkit-scrollbar {
+      display: none;
     }
   }
 
