@@ -37,6 +37,8 @@ function Methods(props: Props) {
     const dataSet = props.dataSet;
     const parameters = method.parameters;
     compute(dataSet.csv, methods._id, method._id, args).then((frames) => {
+      console.log(frames);
+
       setMethods(() => {
         // Make sure that the state did not change.
         if (dataSet !== props.dataSet || parameters !== method.parameters)
@@ -139,11 +141,13 @@ function Methods(props: Props) {
     // Recompute
     computeMethod(props.categories[category].types.length - 1);
   }
+
+  if (!method.frames) return <></>; //TODO: add a Loading system
   const colorsValues =
     methods.colors[colorOn]._id === "cluster"
       ? method.colors.values
       : methods.colors[colorOn].values;
-  console.log(colorsValues);
+
   return (
     <>
       <div id="method">
@@ -235,7 +239,9 @@ async function compute(csvData, categoryID, methodID, args = {}) {
       }),
     }
   );
+
   const resp = await response.json();
+  console.log(resp);
   return resp;
 }
 

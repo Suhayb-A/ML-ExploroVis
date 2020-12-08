@@ -1,15 +1,6 @@
-from sklearn import cluster;
-from methods import inputs;
-
-def basic(func):
-  def inner(data, args):
-    results = func(**args).fit(data.loc[:, ['x', 'y']])
-    data['cluster'] = results.labels_
-    return [{
-      'scatter': data.to_dict('records')
-    }]
-  return inner;
-
+from sklearn.cluster import KMeans, SpectralClustering, DBSCAN
+from methods import inputs
+from methods.cluster.generateCluster import bootstrap;
 
 '''
 method_id : {
@@ -28,9 +19,18 @@ method_id : {
 }
 '''
 methods = {
+  'Spectral': {
+    'title': 'Spectral',
+    'parameters': [inputs.Hidden('n_clusters', 2), inputs.Hidden('random_state', 0)],
+    'algorithm': bootstrap(SpectralClustering, trainable=False)
+  },
   'DBSCAN': {
     'title': 'DBSCAN',
-    'parameters': [inputs.Range('eps', 'Search Radius', 0.25, 0.1, 1)],
-    'algorithm': basic(cluster.DBSCAN)
+    'algorithm': bootstrap(DBSCAN, trainable=False)
+  },
+  'KMeans': {
+    'title': 'KMeans',
+    'parameters': [inputs.Hidden('n_clusters', 2)],
+    'algorithm': bootstrap(KMeans, trainable=False)
   }
 }

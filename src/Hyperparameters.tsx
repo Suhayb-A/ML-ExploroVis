@@ -16,7 +16,7 @@ function Hyperparameters({
       <h3>{title}</h3>
       <div id="hyperparameter-options">
         {parameters &&
-          parameters.map((param, i) => {
+          parameters.filter(p =>  p.tag !== 'hidden').map((param, i) => {
             const Input = param.tag;
             const isNumber = NUMBER_TYPES.indexOf(param.value.type) !== -1;
 

@@ -38,3 +38,12 @@ def Number(arg_id, title, default_value):
       'default': default_value,
     }
   }
+
+def Hidden(arg_id, default_value):
+    return {
+    '_id': arg_id,
+    'tag': 'hidden',
+    'value': {
+      'value': default_value,
+    }
+  }

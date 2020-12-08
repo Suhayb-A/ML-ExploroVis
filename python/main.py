@@ -20,7 +20,14 @@ def compute(category_id, method_id):
   data = pd.read_csv(StringIO(body['data']))
   args = body['args']
   func = methods.config[category_id]['types'][method_id]['algorithm']
-  return jsonify(func(data, args))
+  results = func(data, args);
+
+  for frame in results:
+    for key in frame:
+      if isinstance(frame[key], pd.DataFrame):
+        frame[key] = frame[key].to_dict('records')
+
+  return jsonify(results)
 
 
 if __name__ == '__main__':

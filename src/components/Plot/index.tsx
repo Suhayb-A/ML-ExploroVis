@@ -51,6 +51,7 @@ class Base extends React.Component<Props> {
   }
 
   private updateDomains() {
+    if (!this.props.frames) return;
     const data = this.props.frames[0].scatter || [];
     // Get the X & Y ranges, and the number of groups.
     this.xy_domains = data.reduce(

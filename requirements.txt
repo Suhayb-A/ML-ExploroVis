@@ -3,3 +3,4 @@ flask
 sklearn
 pandas
 numpy
+tqdm

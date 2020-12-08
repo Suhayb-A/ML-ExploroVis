@@ -1,24 +1,12 @@
+from methods.classify.generateClassifiers import bootstrap
 from sklearn.neighbors import KNeighborsClassifier
-import numpy as np;
-
-def KNeighbors(data, args):
-  # FIXME: Used for testing
-  #**args
-  STEP = 0.1
-  X = data.loc[:, ['x', 'y']];
-  y = data['g'];
-  x_min, x_max = X.loc[:, 'x'].min() - 1, X.loc[:, 'x'].max() + 1
-  y_min, y_max = X.loc[:, 'y'].min() - 1, X.loc[:, 'y'].max() + 1
-  xx, yy = np.meshgrid(np.arange(x_min, x_max, STEP),
-                      np.arange(y_min, y_max, STEP))
-
-  results = KNeighborsClassifier(2).fit(X, y)
-  Z = results.predict_proba(np.c_[xx.ravel(), yy.ravel()])
-
-  return [{
-    'scatter': data.to_dict('records'),
-    'bound': Z.tolist()
-  }]
+from sklearn.neural_network import MLPClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.naive_bayes import GaussianNB
+from methods import inputs
 
 '''
 method_id : {
@@ -38,8 +26,66 @@ method_id : {
 '''
 
 methods = {
-  'nearest_neighbors' : {
-    'title': 'Nearest Neighbors',
-    'algorithm': KNeighbors
-  }
+  'ann' : {
+    'title': 'Artificial Neural Network',
+    'parameters': [inputs.Select('activation', "Activation function", 'relu', ['identity', 'logistic', 'tanh', 'relu'])],
+    'algorithm': bootstrap(MLPClassifier, trainable = True)
+  },
+  'KNN' : {
+    'title': 'K-Nearest Neighbor',
+    'parameters': [],
+    'algorithm': bootstrap(KNeighborsClassifier, trainable = False)
+  },
+  'SVM' : {
+    'title': 'Support Vector Machine',
+    'parameters': [],
+    'algorithm': bootstrap(SVC, trainable = False)
+  },
+  'decision_tree' : {
+    'title': 'Decision Tree',
+    'parameters': [],
+    'algorithm': bootstrap(DecisionTreeClassifier, trainable = False)
+  },
+  'naive_bayes' : {
+    'title': 'Naive Bayes',
+    'parameters': [],
+    'algorithm': bootstrap(GaussianNB, trainable = False)
+  },
+  'ANN' : {
+    'title': 'Random Forrest',
+    'parameters': [],
+    'algorithm': bootstrap(RandomForestClassifier, trainable = False)
+  },
 }
+
+# DecisionTreeClassifier, RandomForestClassifier
+
+
+# def generateANN(hidden_layer_sizes, activation, alpha):
+# 	classifier = MLPClassifier(hidden_layer_sizes=hidden_layer_sizes,
+# 		activation=activation, alpha=alpha)
+# 	return classifier
+
+# def generateKNN(k):
+# 	classifier = KNeighborsClassifier(n_neighbors=k)
+# 	return classifier
+
+# def generateSVM(kernel, degree, C):
+# 	classifier = SVC(kernel=kernel, degree=degree, C=C)
+# 	return classifier
+
+# def generateDTree(criterion, max_depth, min_samples_split, min_samples_leaf):
+# 	classifier = DecisionTreeClassifier(criterion=criterion,
+# 		max_depth=max_depth, min_samples_split=min_samples_split,
+# 		min_samples_leaf=min_samples_leaf)
+# 	return classifier
+
+# def generateNB():
+# 	return GaussianNB()
+
+# def generateRandomForrest(n_estimators, criterion, max_depth, min_samples_split, min_samples_leaf):
+# 	classifier = RandomForestClassifier(n_estimators=n_estimators,
+# 		criterion=criterion, max_depth=max_depth,
+# 		min_samples_split=min_samples_split,
+# 		min_samples_leaf=min_samples_leaf)
+# 	return classifier

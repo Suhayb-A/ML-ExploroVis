@@ -37,7 +37,7 @@ config = {
           }]
       },
       {
-        '_id': 'correct',
+        '_id': 'correctness',
         'title': 'Correctness',
         'values': [{
             'title': 'Correct',
