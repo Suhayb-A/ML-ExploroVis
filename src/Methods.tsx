@@ -37,8 +37,6 @@ function Methods(props: Props) {
     const dataSet = props.dataSet;
     const parameters = method.parameters;
     compute(dataSet.csv, methods._id, method._id, args).then((frames) => {
-      console.log(frames);
-
       setMethods(() => {
         // Make sure that the state did not change.
         if (dataSet !== props.dataSet || parameters !== method.parameters)
@@ -241,7 +239,6 @@ async function compute(csvData, categoryID, methodID, args = {}) {
   );
 
   const resp = await response.json();
-  console.log(resp);
   return resp;
 }
 
