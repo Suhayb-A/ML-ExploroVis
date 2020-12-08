@@ -39,6 +39,7 @@ def Number(arg_id, title, default_value):
     }
   }
 
+# Does not show up in the ui but gets passed in on request.
 def Hidden(arg_id, default_value):
     return {
     '_id': arg_id,
