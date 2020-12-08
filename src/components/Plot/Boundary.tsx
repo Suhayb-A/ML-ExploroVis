@@ -8,9 +8,8 @@ export default function draw(
   thumbnail?: boolean
 ) {
   console.log(value);
-  const data = value.boundary;
-  if (!data) return;
-  const points = svg.selectAll("path").data(data);
+  const data = value.boundary || [];
+  const points = svg.selectAll("circle").data(data);
   const radius = thumbnail ? 2 : 4;
 
   type Points = typeof points;
@@ -23,7 +22,7 @@ export default function draw(
       .attr("r", radius);
   }
 
-  update(points.enter().append("path"));
+  update(points.enter().append("circle"));
 
   update(points);
 
@@ -37,8 +36,7 @@ export default function draw(
 //   scaleY: d3.ScaleLinear<number, number, never>,
 //   thumbnail?: boolean
 // ) {
-//   const data = value.boundary;
-//   if (!data) return;
+//   const data = value.boundary || [];
 //   const points = svg.selectAll("path").data([data]);
 
 //   type Points = typeof points;
