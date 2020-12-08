@@ -68,10 +68,10 @@ def generateNaiveBoundary(model, X):
 
 def step(classifier, data, labels):
 	nClasses = len(np.unique(labels))
-	truePositives = [0]*nClasses
-	falsePositives = [0]*nClasses
-	trueNegetives = [0]*nClasses
-	falseNegetives = [0]*nClasses
+	truePositives = [0] * nClasses
+	falsePositives = [0] * nClasses
+	trueNegetives = [0] * nClasses
+	falseNegetives = [0] * nClasses
 	y_pred = []
 	correct = 0
 	incorrect = 0

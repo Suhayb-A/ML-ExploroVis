@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import Graph from "./Plot";
 const { Menu, getCurrentWindow } = window.require("electron").remote;
 

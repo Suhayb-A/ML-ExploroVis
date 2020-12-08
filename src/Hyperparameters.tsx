@@ -56,7 +56,7 @@ function Hyperparameters({
                 ) : (
                   <div className="hyperparameter-option-group">
                     <Input {...param.value} onChange={onChange} />
-                    {param.value.type == "range" && (
+                    {param.value.type === "range" && (
                       <Input
                         className="hyperparameter-option-secondary"
                         {...param.value}

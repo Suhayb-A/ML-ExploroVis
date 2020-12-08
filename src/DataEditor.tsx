@@ -108,7 +108,7 @@ function DataSetEditor({ close, onAdd }: Props) {
       </div>
       <div className="model-editor-buttons">
         <div onClick={close}>Cancel</div>
-        <div onClick={add} className={state.data.length == 0 ? "disabled" : ""}>Add</div>
+        <div onClick={add} className={state.data.length === 0 ? "disabled" : ""}>Add</div>
       </div>
     </div>
   );

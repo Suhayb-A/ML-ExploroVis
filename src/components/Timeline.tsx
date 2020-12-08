@@ -85,7 +85,7 @@ function TimeLine(props: Props) {
           playing={state.playing}
           onClick={() =>
             setState((state) => {
-              if (state.currentFrame == frameCount) {
+              if (state.currentFrame === frameCount) {
                 // Restart
                 return { ...state, playing: !state.playing, currentFrame: 0 };
               }
@@ -95,7 +95,7 @@ function TimeLine(props: Props) {
         />
         <div className={"timeline-step" + (state.step ? " selected": "")} onClick={()=> {
           setState((state) => {
-            if (state.currentFrame == frameCount) {
+            if (state.currentFrame === frameCount) {
               // Restart
               return { ...state, step: !state.step, currentFrame: 0 };
             }
@@ -130,7 +130,7 @@ function TimeLine(props: Props) {
 function PlayButton(props: { playing: boolean; onClick: () => void }) {
   return (
     <div className="timeline-play-pause" onClick={props.onClick}>
-      <img src={props.playing ? Pause : Play} />
+      <img src={props.playing ? Pause : Play} alt="Play & pause button"/>
     </div>
   );
 }
