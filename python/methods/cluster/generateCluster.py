@@ -2,10 +2,12 @@ import numpy as np
 
 def bootstrap(func, trainable):
   def inner(data, args):
-    cluster = func(**args);
+    data_raw = data.loc[:, ['x', 'y']].to_numpy();
+    cluster = func(**args)
+
     if not trainable:
       return [{
-        'scatter': data.assign(cluster = cluster.fit_predict(data))
+        'scatter': data.assign(cluster = cluster.fit_predict(data_raw))
       }]
 
     results = []
@@ -14,8 +16,8 @@ def bootstrap(func, trainable):
         cluster.fit(data)
 
       results.append({
-        'scatter': data.assign(cluster = cluster.predict(data)),
-        'boundary': generateNaiveBoundary(cluster, data)
+        'scatter': data.assign(cluster = cluster.predict(data_raw)),
+        'boundary': generateNaiveBoundary(cluster, data_raw)
       })
     return results
   return inner;

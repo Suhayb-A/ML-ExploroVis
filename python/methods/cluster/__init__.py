@@ -31,6 +31,6 @@ methods = {
   'KMeans': {
     'title': 'KMeans',
     'parameters': [inputs.Hidden('n_clusters', 2)],
-    'algorithm': bootstrap(KMeans, trainable=False)
+    'algorithm': bootstrap(KMeans, trainable=True)
   }
 }
