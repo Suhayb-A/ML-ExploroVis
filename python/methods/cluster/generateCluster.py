@@ -13,7 +13,7 @@ def bootstrap(func, trainable):
     results = []
     for i in range(30):
       for j in range(5):
-        cluster.fit(data)
+        cluster.fit(data_raw)
 
       results.append({
         'scatter': data.assign(cluster = cluster.predict(data_raw)),
@@ -23,8 +23,8 @@ def bootstrap(func, trainable):
   return inner;
 
 def generateNaiveBoundary(model, X):
-	x_min, x_max = X.loc[:, 'x'].min() - 1, X.loc[:, 'x'].max() + 1
-	y_min, y_max = X.loc[:, 'y'].min() - 1, X.loc[:, 'y'].max() + 1
+	x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+	y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
 	xx, yy = np.meshgrid(np.arange(x_min, x_max, 0.1), np.arange(y_min, y_max, 0.1))
 	xxl = xx.tolist()
 	yyl = yy.tolist()
