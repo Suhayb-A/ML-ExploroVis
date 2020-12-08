@@ -5,7 +5,7 @@ import time
 import warnings
 
 import numpy as np
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 from sklearn import cluster, datasets, mixture
 from sklearn.neighbors import kneighbors_graph
@@ -67,8 +67,9 @@ for i_dataset, (dataset, algo_params) in enumerate(datasets):
     # normalize dataset for easier parameter selection
     X = StandardScaler().fit_transform(X)
     toCSV = np.zeros((X.shape[0], 3))
-    for i in range((X.shape[0])):
-    	toCSV[i,0] = X[i,0]
-    	toCSV[i,1] = X[i,1]
-    	toCSV[i,2] = y[i]
-    np.savetxt(datasetName + ".csv", toCSV, delimiter=",")
+    for i in range((X.shape[0] + 1)):
+        j = i - 1
+        toCSV[j, 0] = X[j, 0]
+        toCSV[j, 1] = X[j, 1]
+        toCSV[j, 2] = y[j]
+    np.savetxt(datasetName + ".csv", toCSV, header="x,y,g", delimiter=",", comments="")
