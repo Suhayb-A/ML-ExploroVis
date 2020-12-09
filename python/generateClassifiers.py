@@ -11,54 +11,27 @@ from Counterfactual import generateBoundary
 
 def generateClassifier(classifierName, data, labels, args):
 	if classifierName == 'Artificial Neural Network':
-		classifier = generateANN(**args)
+		newArgs = {}
+		newArgs['activation'] = args['activation']
+		newArgs['hidden_layer_sizes'] = [args['neurons_per_layer']]*args['layers']
+		classifier = MLPClassifier(**newArgs)
 		trainable = True
 	if classifierName == 'K-Nearest Neighbor':
-		classifier = generateKNN(**args)
+		classifier = KNeighborsClassifier(**args)
 		trainable = False
 	if classifierName == 'Support Vector Machine':
-		classifier = generateSVM(**args)
+		classifier = SVC(**args)
 		trainable = False
 	if classifierName == 'Decision Tree':
-		classifier = generateDTree(**args)
-		trainable = True
+		classifier = DecisionTreeClassifier(**args)
+		trainable = False
 	if classifierName == 'Naive Bayes':
-		classifier = generateNB()
+		classifier = GaussianNB()
 		trainable = False
 	if classifierName == 'Random Forrest':
-		classifier = generateRandomForrest(**args)
-		trainable = True
+		classifier = RandomForestClassifier(**args)
+		trainable = False
 	return generateStats(classifier, data, labels, trainable)
-
-
-def generateANN(hidden_layer_sizes, activation, alpha):
-	classifier = MLPClassifier(hidden_layer_sizes=hidden_layer_sizes,
-		activation=activation, alpha=alpha)
-	return classifier
-
-def generateKNN(k):
-	classifier = KNeighborsClassifier(n_neighbors=k)
-	return classifier
-
-def generateSVM(kernel, degree, C):
-	classifier = SVC(kernel=kernel, degree=degree, C=C)
-	return classifier
-
-def generateDTree(criterion, max_depth, min_samples_split, min_samples_leaf):
-	classifier = DecisionTreeClassifier(criterion=criterion,
-		max_depth=max_depth, min_samples_split=min_samples_split,
-		min_samples_leaf=min_samples_leaf)
-	return classifier
-
-def generateNB():
-	return GaussianNB()
-
-def generateRandomForrest(n_estimators, criterion, max_depth, min_samples_split, min_samples_leaf):
-	classifier = RandomForestClassifier(n_estimators=n_estimators,
-		criterion=criterion, max_depth=max_depth,
-		min_samples_split=min_samples_split,
-		min_samples_leaf=min_samples_leaf)
-	return classifier
 
 def generateStats(classifier, data, labels, trainable):
 	# Populates statistics lists

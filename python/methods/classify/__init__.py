@@ -38,8 +38,30 @@ method_id : {
 '''
 
 methods = {
-  'nearest_neighbors' : {
-    'title': 'Nearest Neighbors',
+  'K-Nearest Neighbor' : {
+    'title': 'K Nearest Neighbors',
+    'parameters': [inputs.Range('n_neighbors', 'K', 3, 1, 9)]
+    'algorithm': KNeighbors
+  },
+  'Artificial Neural Network' : {
+    'title': 'Artificial Neural Network',
+    'parameters': [inputs.Range('neurons_per_layer', 'neurons_per_layer', 5, 3, 10),
+    inputs.Range('layers', 'layers', 2, 1, 5),
+    inputs.Select('activation', 'Activation', 'relu', ['identity', 'logistic', 'tanh', 'relu'])]
+    'algorithm': KNeighbors
+  },
+  'SVM' : {
+    'title': 'SVM',
+    'parameters': [inputs.Range('C', 'Regularization parameter', 1.0, 0.1, 1),
+    inputs.Select('kernel', 'Kernel', 'linear', ['linear', 'rbf', 'sigmoid', 'poly']),
+    inputs.Range('degree', 'Degree', 3, 3, 5)]
+    'algorithm': KNeighbors
+  },
+  'Decision Tree' : {
+    'title': 'Decision Tree',
+    'parameters': [inputs.Range('max_depth', 'Max Depth', 3, 2, 7),
+    inputs.Range('min_samples_leaf', 'Min Samples Leaf', 2, 1, 10),
+    inputs.Range('min_samples_split', 'Min Samples Split', 2, 1, 10)]
     'algorithm': KNeighbors
   }
 }

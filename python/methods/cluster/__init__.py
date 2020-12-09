@@ -30,7 +30,18 @@ method_id : {
 methods = {
   'DBSCAN': {
     'title': 'DBSCAN',
-    'parameters': [inputs.Range('eps', 'Search Radius', 0.25, 0.1, 1)],
+    'parameters': [inputs.Range('eps', 'Search Radius', 0.25, 0.05, 0.5),
+    inputs.Range('min_samples', 'Minimum Number of Samples', 5, 1, 25)],
     'algorithm': basic(cluster.DBSCAN)
-  }
+  },
+  'KMeans': {
+    'title': 'KMeans',
+    'parameters': [inputs.Range('nclusters', 'Number of Clusters', 3, 2, 5)],
+    'algorithm': basic(cluster.KMeans)
+  },
+  'Spectral': {
+    'title': 'Spectral Clustering',
+    'parameters': [inputs.Range('nclusters', 'Number of Clusters', 3, 2, 5)],
+    'algorithm': basic(cluster.SpectralClustering)
+  },
 }
