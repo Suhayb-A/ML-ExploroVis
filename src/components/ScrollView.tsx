@@ -1,12 +1,14 @@
 import React from "react";
 import Graph from "./Plot";
+import Loading from "../Loading";
+
 const { Menu, getCurrentWindow } = window.require("electron").remote;
 
 interface Props {
   items: any[];
   selectedIDX?: number;
   children?: React.ReactNode;
-  colorOn?: string;
+  colorFor: (point: any) => string;
   onSelect?: (idx: number) => void;
 }
 
@@ -20,7 +22,7 @@ function ScrollView(props: Props) {
           item={item}
           selected={props.selectedIDX === idx}
           onClick={() => props.onSelect && props.onSelect(idx)}
-          colorOn={props.colorOn}
+          colorFor={props.colorFor}
         />
       ))}
     </div>
@@ -35,7 +37,7 @@ function BoxView(props: {
   item: any;
   idx: number;
   selected: boolean;
-  colorOn?: string;
+  colorFor: (point: any) => string;
   onClick?: () => void;
 }) {
   const menu = Menu.buildFromTemplate([
@@ -58,7 +60,9 @@ function BoxView(props: {
       onClick={props.onClick}
     >
       <div className="ScrollView-thumbnail">
-        <Graph frames={props.item.frames} thumbnail={true} colorOn={props.colorOn}/>
+      <Loading waitOn={props.item.frames}>
+          <Graph frames={props.item.frames} thumbnail={true} colorFor={props.colorFor}/>
+        </Loading>
       </div>
       <div className="ScrollView-label">{props.item.title}</div>
     </div>

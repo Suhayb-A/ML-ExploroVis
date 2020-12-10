@@ -21,18 +21,18 @@ method_id : {
 methods = {
   'Spectral': {
     'title': 'Spectral',
-    'parameters': [inputs.Range('nclusters', 'Number of Clusters', 3, 2, 5)],
+    'parameters': [inputs.Range('n_clusters', 'Number of Clusters', 3, 2, 5)],
     'algorithm': bootstrap(SpectralClustering, trainable=False)
   },
   'DBSCAN': {
     'title': 'DBSCAN',
-    'parameters': [inputs.Range('eps', 'Search Radius', 0.25, 0.05, 0.5),
+    'parameters': [inputs.Range('eps', 'Search Radius', 0.25, 0.05, 0.5, step = 0.01),
     inputs.Range('min_samples', 'Minimum Number of Samples', 5, 1, 25)],
     'algorithm': bootstrap(DBSCAN, trainable=False),
   },
   'KMeans': {
     'title': 'KMeans',
-     'parameters': [inputs.Range('nclusters', 'Number of Clusters', 3, 2, 5)],
+     'parameters': [inputs.Range('n_clusters', 'Number of Clusters', 3, 2, 5)],
     'algorithm': bootstrap(KMeans, trainable=True)
   }
 }

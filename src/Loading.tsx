@@ -1,7 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import GridLoader from "react-spinners/GridLoader";
 
-function Loading() {
-  return <></>;
+function Loading({waitOn, children}: {waitOn?: any, children: any}) {
+  if (!waitOn) {
+    return <div className="loading"><GridLoader color="rgba(0, 0, 0, 0.15)" margin={5}/></div>
+  }
+  return children;
 }
 
 export default Loading;

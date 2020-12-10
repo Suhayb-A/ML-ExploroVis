@@ -8,13 +8,13 @@ export const COLORS = ["black", ...d3.schemeCategory10];
 
 export function getColor(index: number | string) {
   // Offest the index so that -1 would be black.
-  return COLORS[Number(index) + 1];
+  return COLORS[(Number(index)% d3.schemeCategory10.length) + 1 ];
 }
 
 export interface Props {
   frames: any;
   responsive?: boolean;
-  colorOn?: string;
+  colorFor: (point: any) => string;
   thumbnail?: boolean;
   t?: number;
 }
@@ -28,7 +28,6 @@ class Base extends React.Component<Props> {
 
   static defaultProps = {
     responsive: false,
-    colorOn: "g",
   };
 
   constructor(props: Props) {
@@ -83,8 +82,7 @@ class Base extends React.Component<Props> {
   }
 
   private setFrameColor(frame: any) {
-    const colorOn = this.props.colorOn;
-    frame.scatter.forEach((d) => (d["color"] = getColor(d[colorOn])));
+    frame.scatter.forEach((d) => (d["color"] = this.props.colorFor(d)));
     return frame;
   }
 

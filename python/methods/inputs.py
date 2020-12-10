@@ -1,4 +1,4 @@
-def Range(arg_id, title, default_value, min, max):
+def Range(arg_id, title, default_value, min, max, step = 1):
   return {
     '_id': arg_id,
     'title': title,
@@ -9,7 +9,7 @@ def Range(arg_id, title, default_value, min, max):
       'default': default_value,
       'min': min,
       'max': max,
-      'step': 0.01
+      'step': step
     }
   }
 

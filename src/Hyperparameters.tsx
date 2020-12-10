@@ -10,6 +10,7 @@ function Hyperparameters({
   title: string;
   parameters: any;
   setParameters: (parameters: any) => void;
+  run?: any;
 }) {
   return (
     <div id="hyperparameter">

@@ -1,7 +1,7 @@
 import React, { createRef } from "react";
 import * as d3 from "d3";
 import Scatter from "./Plot/Scatter";
-import { getColor } from "./Plot";
+
 const PADDING = 0;
 const DRAW_DRAG_GAP_DELAY_MS = 50;
 interface DataPoint {
@@ -12,6 +12,7 @@ interface DataPoint {
 
 export interface Props {
   data: DataPoint[];
+  colorFor: (point: any) => string;
   addDataPoints: (newPoints: DataPoint[]) => void;
 }
 
@@ -62,7 +63,7 @@ class DrawPlot extends React.Component<Props> {
     );
     const scatter = this.props.data.map((d) => ({
       ...d,
-      color: getColor(d["g"]),
+      color: this.props.colorFor(d),
     }));
 
     this.drawGraphs(svg, { scatter }, this.xy[0], this.xy[1], false);

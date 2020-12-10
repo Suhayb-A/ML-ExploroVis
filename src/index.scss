@@ -328,6 +328,19 @@ input:not([type="range"]),
       border-radius: 5px;
     }
   }
+
+  .legend-bound  {
+    padding-top: 8px;
+    font-size: 13px;
+    div {
+      border-top: 3px dotted rgba(0, 0, 0, 0.15);
+      width: 10px;
+      display: inline-block;
+      margin-left: 0;
+      margin-bottom: 3px;
+      margin-right: 4px;
+    }
+  }
 }
 
 #data_vis {
@@ -651,4 +664,14 @@ input:not([type="range"]),
       background: $blue;
     }
   }
+}
+
+
+.loading {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
 }

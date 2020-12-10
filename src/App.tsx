@@ -5,12 +5,7 @@ import Methods from "./Methods";
 import Help from "./Help";
 import Popup from "reactjs-popup";
 import DataEditor from "./DataEditor";
-import Config from "./congfig.json";
-
-// const fetchRetry = require("fetch-retry")(fetch, {
-//   retries: 100,
-//   retryDelay: 800,
-// });
+import { getColor } from "./components/Plot";
 
 function resizeAnimation(durration: number = 0.35) {
   setTimeout(() => {
@@ -24,6 +19,10 @@ function App() {
   const [helpActive, setHelpActive] = useState(false);
   const [selectedDataIDX, setSelectedDataIDX] = useState(0);
   const [methodPath, setMethodPath] = useState("cluster/default");
+
+  function colorFor(data) {
+    return getColor(data['g']);
+  }
 
   // Initial data fetch
   useEffect(() => {
@@ -50,6 +49,8 @@ function App() {
     setDataSet((datasets) => [...datasets, newDataSet]);
   }
 
+  if (!dataSets.length) return <></>;
+
   const dataSet = dataSets[selectedDataIDX];
   return (
     <main>
@@ -67,7 +68,7 @@ function App() {
                 modal
                 closeOnDocumentClick={false}
               >
-                {(close) => <DataEditor close={close} onAdd={addDataSet} />}
+                {(close) => <DataEditor colorFor={colorFor} close={close} onAdd={addDataSet} />}
               </Popup>
               <div
                 className={"button" + (helpActive ? " active" : "")}
@@ -80,13 +81,13 @@ function App() {
           </div>
           <ScrollView
             items={dataSets}
+            colorFor={colorFor}
             selectedIDX={selectedDataIDX}
             onSelect={setSelectedDataIDX}
           />
         </div>
         <div id="data_vis">
           <Methods
-            categories={Config}
             dataSet={dataSet}
             setMethodPath={setMethodPath}
           />

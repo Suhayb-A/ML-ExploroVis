@@ -69,4 +69,5 @@ for i_dataset, (dataset, algo_params) in enumerate(datasets):
     # normalize dataset for easier parameter selection
     X = MinMaxScaler().fit_transform(X)
 
-    pd.DataFrame({'x': X[:, 0], 'y': X[:, 1], 'g': y.astype(int)}).to_csv(datasetName + ".csv", index=False)
+    data = pd.DataFrame({'x': X[:, 0], 'y': X[:, 1], 'g': y.astype(int)})
+    data.sample(100).to_csv(datasetName + ".csv", index=False)

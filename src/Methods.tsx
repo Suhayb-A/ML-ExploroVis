@@ -6,113 +6,90 @@ import Hyperparameters from "./Hyperparameters";
 import Popup from "reactjs-popup";
 import ModelEditor from "./ModelEditor";
 import { getColor } from "./components/Plot";
+import Config from "./congfig.json";
+import { compute } from "./compute";
+import Loading from "./Loading";
 
 interface Props {
-  categories: any;
-  dataSet?: DataSet;
+  dataSet: DataSet;
   setMethodPath: (path: string) => void;
 }
 
-function Methods(props: Props) {
-  const [category, setcategory] = useState(0);
-  const [colorOn, setColorOn] = useState(0);
-  const [selectedMethodIDX, setSelectedMethodIDX] = useState(0);
-  const [methods, setMethods] = useState(undefined);
-  const [parameters, setParameters] = useState(undefined);
+interface DataSource {
+  parameters: any
+  frames?: any
+}
 
-  function computeMethod(index: any = selectedMethodIDX) {
-    if (index === undefined || !props.categories || !props.dataSet) return;
-    const methods = props.categories[category];
-    if (!methods) return;
-
-    const i = index;
-    const method = methods.types[i];
-    const args = method.parameters
-      ? method.parameters.reduce((r, v) => {
+async function computeMethod(dataSet, catagoryID, method) {
+    const parameters = method.parameters;
+    const args = parameters
+      ? parameters.reduce((r, v) => {
           r[v["_id"]] = v["value"]["value"];
           return r;
         }, {})
       : {};
 
-    const dataSet = props.dataSet;
-    const parameters = method.parameters;
-    compute(dataSet.csv, methods._id, method._id, args).then((frames) => {
-      setMethods(() => {
-        // Make sure that the state did not change.
-        if (dataSet !== props.dataSet || parameters !== method.parameters)
-          return;
+    return await compute(dataSet.csv, catagoryID, method._id, args);
+  }
 
-        const methods = props.categories[category];
-        methods.types[i] = { ...methods.types[i], frames };
-        if (methods._id === "cluster") {
-          // Update cluster colors
-          const colorValues = [
-            {
-              title: "Not Clustered",
-              value: -1,
-            },
-          ];
-          const max = methods.types[i].frames.reduce((max, frame) => {
-            return Math.max(
-              max,
-              ...frame.scatter.map((d) => d[methods.colors[0]._id])
-            );
-          }, -1);
+function Methods(props: Props) {
+  const categories = Config;
+  const [selectedCategoryIDX, selectCategoryIDX] = useState(0);
+  const [selectedMethodIDX, selectMethodIDX] = useState(0);
+  const selectedCategory = categories[selectedCategoryIDX];
+  const [colorOn, setColorOn] = useState(0);
+  const method = selectedCategory.types[selectedMethodIDX];
+  // A copy of selectedCategory.types tied to the current dataset & contains the
+  // computed frames.
+  const [methods, setMethods] = useState(undefined);
+  const [, updater] = useState(0);
 
-          for (let i = 0; i <= max; i++) {
-            colorValues.push({
-              title: `Cluster ${i + 1}`,
-              value: i,
-            });
-          }
-          methods.types[i].colors = {
-            values: colorValues,
-          };
-        }
-        return { ...methods };
-      });
-    });
+  function forceUpdate() {
+    updater(o => o + 1);
   }
 
   useEffect(() => {
     // On catagory reset
-    setSelectedMethodIDX(0);
+    selectMethodIDX(0);
     setColorOn(0);
-  }, [category]);
+  }, [selectedCategoryIDX]);
 
   useEffect(() => {
-    if (!props.categories || !props.dataSet || !props.categories[category])
-      return;
-    const methods = props.categories[category];
-    for (const i in methods.types) {
-      computeMethod(i);
-    }
-  }, [category, props.dataSet, props.categories]);
-
-  useEffect(() => {
-    if (!methods) return;
-    const method = methods.types[selectedMethodIDX];
-    props.setMethodPath(`${methods._id}/${method._id}`);
-  }, [selectedMethodIDX, methods, props]);
-
-  useEffect(() => {
-    // Reinitalize the paramiters
-    if (!methods) return;
-    const method = methods.types[selectedMethodIDX];
     if (!method) return;
-    setParameters(method.parameters);
-  }, [methods, selectedMethodIDX]);
+    props.setMethodPath(`${selectedCategory._id}/${method._id}`);
+  }, [selectedCategory, selectedMethodIDX, props]);
 
-  if (!methods) return <></>;
-  const method = methods.types[selectedMethodIDX];
+  useEffect(() => {
+    const newMethods = selectedCategory.types.map(v => ({...v}));
+    setMethods(newMethods)
+  }, [selectedCategory, props.dataSet]);
+
+
+  async function recomputeAndUpdate(method) {
+    const frames = await computeMethod(props.dataSet, selectedCategory._id, method);
+    (method as any).frames = frames;
+    forceUpdate();
+  }
+
+  useEffect(() => {
+    if (!methods) return;
+
+    (async function _() {
+      methods.forEach(method => {
+          recomputeAndUpdate(method);
+      });
+    })();
+  }, [methods]);
+
+  if (!methods || !method) return <> </>;
 
   function addMethod(newMethod: { _id: string; title: string }) {
-    // Get the method.
-    let method = props.categories[category].types.find(
+    // Get the source method.
+    let method = categories[selectedCategoryIDX].types.find(
       (type) => type._id === newMethod._id
     );
-    const newtype = { ...method, title: newMethod.title };
-    newtype.frames = [...newtype.frames];
+
+    let newtype = { ...method, title: newMethod.title } as any;
     // Reset the parameters to their default values.
     newtype.parameters = newtype.parameters
       ? newtype.parameters.map((parameter) => ({
@@ -121,39 +98,61 @@ function Methods(props: Props) {
         }))
       : null;
 
-    // Enable deletion
     newtype["delete"] = (idx: number) => {
-      setSelectedMethodIDX((oldIDX) => (oldIDX >= idx ? oldIDX - 1 : oldIDX));
-
-      props.categories[category].types.splice(idx, 1);
-
-      // Reset methods to prepetuate updates.
-      setMethods((methods) => ({ ...methods }));
+      selectMethodIDX((oldIDX) => (oldIDX >= idx ? oldIDX - 1 : oldIDX));
+      selectedCategory.types.splice(idx, 1);
+      methods.splice(idx, 1);
+      forceUpdate();
     };
 
-    props.categories[category].types = [
-      ...props.categories[category].types,
-      newtype,
-    ];
-
-    // Recompute
-    computeMethod(props.categories[category].types.length - 1);
+    selectedCategory.types.push(newtype);
+    newtype = {...newtype}
+    methods.push(newtype);
+    recomputeAndUpdate(newtype)
+    forceUpdate();
   }
 
-  if (!method.frames) return <></>; //TODO: add a Loading system
-  const colorsValues =
-    methods.colors[colorOn]._id === "cluster"
-      ? method.colors.values
-      : methods.colors[colorOn].values;
+  const colorInfo = selectedCategory.colors[colorOn];
+  const colors = (colorInfo.values || []).reduce((r, v) => {
+    if (v.color)
+      r[v.value] = v.color;
+    return r;
+  }, {});
+
+  function colorFor(point) {
+    const color = colors[point[colorInfo._id]];
+    if (color) {
+      return color;
+    }
+    return getColor(point[colorInfo._id]);
+  }
+
+  const frames = methods[selectedMethodIDX].frames;
+  const lastFrameIdx = (frames || []).length - 1;
+  const hasBound = !(!frames || !frames[lastFrameIdx] || !frames[lastFrameIdx].boundary);
+
+  let colorValues = colorInfo.values;
+  if (!colorValues) {
+    if (!frames || !frames[lastFrameIdx] || !frames[lastFrameIdx].scatter) {
+      colorValues = [];
+    } else {
+      const values = Array.from(new Set(frames[lastFrameIdx].scatter.map(p => p[colorInfo._id]))).sort((a: any, b: any) => a - b);
+      colorValues = values.map((v, i) => ({
+        title:  v === -1 ? "Not Clustered" : `Cluster ${i + 1}`,
+        value: v as any,
+        color: getColor(v as any)
+      })) as any;
+    }
+  }
 
   return (
     <>
       <div id="method">
         <select
-          value={category}
-          onChange={(event) => setcategory(Number(event.target.value))}
+          value={selectedCategoryIDX}
+          onChange={(event) => selectCategoryIDX(Number(event.target.value))}
         >
-          {props.categories.map((category, idx) => (
+          {categories.map((category, idx) => (
             <option value={idx} key={category._id}>
               {category.title}
             </option>
@@ -161,30 +160,35 @@ function Methods(props: Props) {
         </select>
         <div id="legend">
           <label>Color</label>
-          {methods.colors.length > 1 && (
+          {selectedCategory.colors.length > 1 && (
             <select
               value={colorOn}
               onChange={(event) => setColorOn(Number(event.target.value))}
             >
-              {methods.colors.map((color, idx) => (
+              {selectedCategory.colors.map((color, idx) => (
                 <option value={idx} key={idx}>
                   {color.title}
                 </option>
               ))}
             </select>
           )}
-          {colorsValues.map((color) => (
+          {colorValues.map((color) => (
             <div key={color.value} className="legend-color">
-              <div style={{ background: getColor(color.value) }} />
+              <div style={{ background: color.color }} />
               {color.title}
             </div>
           ))}
+
+          {hasBound && <div className="legend-bound">
+              <div/>
+              Boundary
+            </div>}
         </div>
         <ScrollView
-          items={methods.types}
+          items={methods}
           selectedIDX={selectedMethodIDX}
-          onSelect={setSelectedMethodIDX}
-          colorOn={methods.colors[colorOn]._id}
+          onSelect={selectMethodIDX}
+          colorFor={colorFor}
         />
         <Popup
           trigger={
@@ -198,24 +202,27 @@ function Methods(props: Props) {
           {(close) => (
             <ModelEditor
               close={close}
-              methods={props.categories[category]}
+              methods={categories[selectedCategoryIDX]}
               onAdd={addMethod}
             />
           )}
         </Popup>
       </div>
       <div id="main_container">
-        <Timeline
-          frames={method.frames}
-          colorOn={methods.colors[colorOn]._id}
-        />
+        <Loading waitOn={frames}>
+          <Timeline
+            frames={frames}
+            colorFor={colorFor}
+          />
+        </Loading>
         <Hyperparameters
           title={method.title}
-          parameters={parameters}
-          setParameters={(param) => {
-            setParameters(param);
-            // Recompute the current model.
-            computeMethod(selectedMethodIDX);
+          parameters={method.parameters}
+          setParameters={(parameters) => {
+            method.parameters = parameters;
+            methods[selectedMethodIDX].parameters = parameters;
+            recomputeAndUpdate(methods[selectedMethodIDX]);
+            forceUpdate();
           }}
         />
       </div>
@@ -223,23 +230,6 @@ function Methods(props: Props) {
   );
 }
 
-async function compute(csvData, categoryID, methodID, args = {}) {
-  const response = await fetch(
-    `http://127.0.0.1:4242/compute/${categoryID}/${methodID}`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        data: csvData,
-        args,
-      }),
-    }
-  );
 
-  const resp = await response.json();
-  return resp;
-}
 
 export default Methods;

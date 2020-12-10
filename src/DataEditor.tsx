@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { getColor } from "./components/Plot";
 import clear from "./assets/clear.svg";
 import DrawPlot from "./components/DrawPlot";
 import { csvFormat } from "d3";
@@ -10,9 +9,10 @@ const CLUSTERS = [0, 1];
 export interface Props {
   onAdd: (data: any) => void;
   close: () => void;
+  colorFor: (point: any) => string;
 }
 
-function DataSetEditor({ close, onAdd }: Props) {
+function DataSetEditor({ close, onAdd, colorFor }: Props) {
   const [selctedCluster, setSelctedCluster] = useState(0);
   const [state, setstate] = useState({
     title: "",
@@ -85,7 +85,7 @@ function DataSetEditor({ close, onAdd }: Props) {
                 (cluster === selctedCluster ? " active" : "")
               }
               onClick={() => setSelctedCluster(cluster)}
-              style={{ background: getColor(cluster) }}
+              style={{ background: colorFor({g: cluster}) }}
             />
           ))}
           <div style={{ flexGrow: 1 }} />
@@ -101,7 +101,7 @@ function DataSetEditor({ close, onAdd }: Props) {
             />
           ))}
         </div>
-        <DrawPlot data={state.data} addDataPoints={addDataPoints} />
+        <DrawPlot colorFor={colorFor} data={state.data} addDataPoints={addDataPoints} />
       </div>
       <div className="caption">
         Select a cluster color from the right, then draw on the right.

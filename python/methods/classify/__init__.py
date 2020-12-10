@@ -26,9 +26,9 @@ method_id : {
 '''
 
 def ann(data, args):
-  bootstrap(MLPClassifier, trainable = True)(data, {
-    activation: args['activation'],
-    hidden_layer_sizes: [args['neurons_per_layer']] * args['layers']
+  return bootstrap(MLPClassifier, trainable = True)(data, {
+    'activation': args['activation'],
+    'hidden_layer_sizes': [args['neurons_per_layer']] * args['layers']
   })
 
 methods = {
@@ -36,7 +36,7 @@ methods = {
     'title': 'Artificial Neural Network',
     'parameters': [inputs.Range('neurons_per_layer', 'neurons_per_layer', 5, 3, 10),
       inputs.Range('layers', 'layers', 2, 1, 5),
-      inputs.Select('activation', 'Activation', 'relu', ['identity', 'logistic', 'tanh', 'relu'])],
+      inputs.Select('activation', 'Activation', 'relu', ['identity', 'logistic', 'tanh', {'relu': 'Rectified Linear Unit'}])],
     'algorithm': ann
   },
   'KNN' : {
@@ -46,7 +46,7 @@ methods = {
   },
   'SVM' : {
     'title': 'Support Vector Machine',
-    'parameters': [inputs.Range('C', 'Regularization parameter', 1.0, 0.1, 1),
+    'parameters': [inputs.Range('C', 'Regularization parameter', 1.0, 0.1, 1, step = 0.01),
      inputs.Select('kernel', 'Kernel', 'linear', ['linear', 'rbf', 'sigmoid', 'poly']),
      inputs.Range('degree', 'Degree', 3, 3, 5)],
     'algorithm': bootstrap(SVC, trainable = False)
