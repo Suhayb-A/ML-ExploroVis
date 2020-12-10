@@ -9,7 +9,7 @@ export default function draw(
 ) {
   const data = value.scatter;
   const points = svg.selectAll("circle").data(data);
-  const radius = thumbnail ? 2 : 4;
+  const radius = thumbnail ? 2 : 5;
 
   type Points = typeof points;
   function update(points: Points) {

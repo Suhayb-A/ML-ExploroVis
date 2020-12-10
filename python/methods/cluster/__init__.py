@@ -1,6 +1,7 @@
 from sklearn.cluster import KMeans, SpectralClustering, DBSCAN, MiniBatchKMeans
 from methods import inputs
 from methods.cluster.generateCluster import bootstrap;
+RANDOM_STATE = 10;
 
 '''
 method_id : {
@@ -21,7 +22,7 @@ method_id : {
 methods = {
   'Spectral': {
     'title': 'Spectral',
-    'parameters': [inputs.Range('n_clusters', 'Number of Clusters', 3, 2, 5)],
+    'parameters': [inputs.Range('n_clusters', 'Number of Clusters', 3, 2, 5), inputs.Hidden('random_state', RANDOM_STATE)],
     'algorithm': bootstrap(SpectralClustering, trainable=False)
   },
   'DBSCAN': {

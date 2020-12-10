@@ -66,7 +66,9 @@ function Methods(props: Props) {
 
 
   async function recomputeAndUpdate(method) {
+    const params = method.parameters;
     const frames = await computeMethod(props.dataSet, selectedCategory._id, method);
+    if (params !== method.parameters) return; //A new request was sent.
     (method as any).frames = frames;
     forceUpdate();
   }
@@ -160,6 +162,7 @@ function Methods(props: Props) {
         </select>
         <div id="legend">
           <label>Color</label>
+          <div id="legend-items">
           {selectedCategory.colors.length > 1 && (
             <select
               value={colorOn}
@@ -183,6 +186,7 @@ function Methods(props: Props) {
               <div/>
               Boundary
             </div>}
+          </div>
         </div>
         <ScrollView
           items={methods}

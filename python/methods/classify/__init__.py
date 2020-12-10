@@ -7,6 +7,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.naive_bayes import GaussianNB
 from methods import inputs
+RANDOM_STATE = 10;
 
 '''
 method_id : {
@@ -28,7 +29,8 @@ method_id : {
 def ann(data, args):
   return bootstrap(MLPClassifier, trainable = True)(data, {
     'activation': args['activation'],
-    'hidden_layer_sizes': [args['neurons_per_layer']] * args['layers']
+    'hidden_layer_sizes': [args['neurons_per_layer']] * args['layers'],
+    'random_state': RANDOM_STATE
   })
 
 methods = {
@@ -55,7 +57,7 @@ methods = {
     'title': 'Decision Tree',
     'parameters': [inputs.Range('max_depth', 'Max Depth', 3, 2, 7),
      inputs.Range('min_samples_leaf', 'Min Samples Leaf', 2, 1, 10),
-     inputs.Range('min_samples_split', 'Min Samples Split', 2, 1, 10)],
+     inputs.Range('min_samples_split', 'Min Samples Split', 2, 2, 10), inputs.Hidden('random_state', RANDOM_STATE)],
     'algorithm': bootstrap(DecisionTreeClassifier, trainable = False)
   },
   'naive_bayes' : {
@@ -65,7 +67,7 @@ methods = {
   },
   'ANN' : {
     'title': 'Random Forrest',
-    'parameters': [],
+    'parameters': [inputs.Hidden('random_state', RANDOM_STATE)],
     'algorithm': bootstrap(RandomForestClassifier, trainable = False)
   },
 }
