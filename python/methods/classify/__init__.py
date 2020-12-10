@@ -25,25 +25,37 @@ method_id : {
 }
 '''
 
+def ann(data, args):
+  bootstrap(MLPClassifier, trainable = True)(data, {
+    activation: args['activation'],
+    hidden_layer_sizes: [args['neurons_per_layer']] * args['layers']
+  })
+
 methods = {
   'ann' : {
     'title': 'Artificial Neural Network',
-    'parameters': [inputs.Select('activation', "Activation function", 'relu', ['identity', 'logistic', 'tanh', 'relu'])],
-    'algorithm': bootstrap(MLPClassifier, trainable = True)
+    'parameters': [inputs.Range('neurons_per_layer', 'neurons_per_layer', 5, 3, 10),
+      inputs.Range('layers', 'layers', 2, 1, 5),
+      inputs.Select('activation', 'Activation', 'relu', ['identity', 'logistic', 'tanh', 'relu'])],
+    'algorithm': ann
   },
   'KNN' : {
     'title': 'K-Nearest Neighbor',
-    'parameters': [],
+    'parameters': [inputs.Range('n_neighbors', 'K', 3, 1, 9)],
     'algorithm': bootstrap(KNeighborsClassifier, trainable = False)
   },
   'SVM' : {
     'title': 'Support Vector Machine',
-    'parameters': [],
+    'parameters': [inputs.Range('C', 'Regularization parameter', 1.0, 0.1, 1),
+     inputs.Select('kernel', 'Kernel', 'linear', ['linear', 'rbf', 'sigmoid', 'poly']),
+     inputs.Range('degree', 'Degree', 3, 3, 5)],
     'algorithm': bootstrap(SVC, trainable = False)
   },
   'decision_tree' : {
     'title': 'Decision Tree',
-    'parameters': [],
+    'parameters': [inputs.Range('max_depth', 'Max Depth', 3, 2, 7),
+     inputs.Range('min_samples_leaf', 'Min Samples Leaf', 2, 1, 10),
+     inputs.Range('min_samples_split', 'Min Samples Split', 2, 1, 10)],
     'algorithm': bootstrap(DecisionTreeClassifier, trainable = False)
   },
   'naive_bayes' : {

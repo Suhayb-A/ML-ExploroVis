@@ -30,10 +30,10 @@
     "react-test": "react-scripts test --env=jsdom",
     "react-eject": "react-scripts eject",
     "electron-build": "electron-builder",
-    "release": "pyinstaller python/main.py --distpath python/build && yarn react-build && electron-builder --publish=always && rm -rf python/build",
-    "all": "pyinstaller python/main.py --distpath python/build && yarn react-build && electron-builder -mwl && rm -rf python/build",
-    "build": "pyinstaller python/main.py --distpath python/build && yarn react-build && yarn electron-build && rm -rf python/build",
-    "start": "concurrently \"cross-env BROWSER=none yarn react-start\" \"wait-on http://localhost:3000 && electron .\""
+    "release": "python3 python/build.py && pyinstaller python/main.py --distpath python/build && yarn react-build && electron-builder --publish=always && rm -rf python/build",
+    "all": "python3 python/build.py && pyinstaller python/main.py --distpath python/build && yarn react-build && electron-builder -mwl && rm -rf python/build",
+    "build": "python3 python/build.py && pyinstaller python/main.py --distpath python/build && yarn react-build && yarn electron-build && rm -rf python/build",
+    "start": "python3 python/build.py && concurrently \"cross-env BROWSER=none yarn react-start\" \"wait-on http://localhost:3000 && electron .\""
   },
   "eslintConfig": {
     "extends": [

@@ -28,23 +28,19 @@ config = {
       {
         '_id': 'prediction',
         'title': 'Prediction',
-        'values': [{
-            'title': 'Cluster 1',
-            'value': 0
-          },{
-            'title': 'Cluster 2',
-            'value': 1
-          }]
+        # colors are assigned on the client side.
       },
       {
         '_id': 'correctness',
         'title': 'Correctness',
         'values': [{
             'title': 'Correct',
-            'value': 0
+            'value': 0,
+            'color': 'green'
           },{
             'title': 'Incorrect',
-            'value': 1
+            'value': 1,
+            'color': 'red'
           }]
       }
     ]
@@ -56,7 +52,6 @@ def jsonify_category(c, keys=['title', 'types', 'colors']):
   return {key: (jsonify_types(c[key]) if key == 'types' else c[key]) for key in keys}
 
 def jsonify_types(types, keys=['title', 'parameters']):
-  keys 
   return [{**{key: types[type_key].get(key) for key in keys}, '_id': type_key} for type_key in types]
 
 json_config = [{**jsonify_category(config[c]), '_id': c} for c in config];

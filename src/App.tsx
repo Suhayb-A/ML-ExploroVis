@@ -5,11 +5,12 @@ import Methods from "./Methods";
 import Help from "./Help";
 import Popup from "reactjs-popup";
 import DataEditor from "./DataEditor";
+import Config from "./congfig.json";
 
-const fetchRetry = require("fetch-retry")(fetch, {
-  retries: 100,
-  retryDelay: 800,
-});
+// const fetchRetry = require("fetch-retry")(fetch, {
+//   retries: 100,
+//   retryDelay: 800,
+// });
 
 function resizeAnimation(durration: number = 0.35) {
   setTimeout(() => {
@@ -20,9 +21,8 @@ function resizeAnimation(durration: number = 0.35) {
 
 function App() {
   const [dataSets, setDataSet] = useState([]);
-  const [methodTypes, setMethodTypes] = useState({});
-  const [selectedDataIDX, setSelectedDataIDX] = useState(0);
   const [helpActive, setHelpActive] = useState(false);
+  const [selectedDataIDX, setSelectedDataIDX] = useState(0);
   const [methodPath, setMethodPath] = useState("cluster/default");
 
   // Initial data fetch
@@ -32,11 +32,6 @@ function App() {
       .catch((error) => {
         throw error;
       });
-
-    //Load methods
-    fetchRetry("http://127.0.0.1:4242/methods").then(async (response) => {
-      setMethodTypes(await response.json());
-    });
   }, []);
 
   useEffect(() => {
@@ -44,9 +39,9 @@ function App() {
   }, [helpActive]);
 
   function addDataSet(newDataSet) {
-    newDataSet["delete"] = (idx) => {
-      setSelectedDataIDX(oldIDX => oldIDX >= idx ? oldIDX - 1 : oldIDX);
-      setDataSet((datasets) => {
+    newDataSet["delete"] = idx => {
+      setSelectedDataIDX(oldIDX => (oldIDX >= idx ? oldIDX - 1 : oldIDX));
+      setDataSet(datasets => {
         const newDataSets = [...datasets];
         newDataSets.splice(idx, 1);
         return newDataSets;
@@ -91,7 +86,7 @@ function App() {
         </div>
         <div id="data_vis">
           <Methods
-            categories={methodTypes}
+            categories={Config}
             dataSet={dataSet}
             setMethodPath={setMethodPath}
           />
