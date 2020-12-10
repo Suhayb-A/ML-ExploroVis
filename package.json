@@ -8,6 +8,7 @@
   "build": {
     "extraResources": [
       "./python/data/",
+      "./python/methods/**/*.md",
       "./python/build/"
     ]
   },
