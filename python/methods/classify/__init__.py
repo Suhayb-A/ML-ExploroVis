@@ -34,7 +34,7 @@ def ann(data, args):
 methods = {
   'ann' : {
     'title': 'Artificial Neural Network',
-    'parameters': [inputs.Range('neurons_per_layer', 'neurons_per_layer', 5, 3, 10),
+    'parameters': [inputs.Range('neurons_per_layer', 'neurons_per_layer', 16, 3, 64),
       inputs.Range('layers', 'layers', 2, 1, 5),
       inputs.Select('activation', 'Activation', 'relu', ['identity', 'logistic', 'tanh', {'relu': 'Rectified Linear Unit'}])],
     'algorithm': ann

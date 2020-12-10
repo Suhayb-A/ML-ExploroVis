@@ -1,4 +1,4 @@
-from sklearn.cluster import KMeans, SpectralClustering, DBSCAN
+from sklearn.cluster import KMeans, SpectralClustering, DBSCAN, MiniBatchKMeans
 from methods import inputs
 from methods.cluster.generateCluster import bootstrap;
 
@@ -33,6 +33,6 @@ methods = {
   'KMeans': {
     'title': 'KMeans',
      'parameters': [inputs.Range('n_clusters', 'Number of Clusters', 3, 2, 5)],
-    'algorithm': bootstrap(KMeans, trainable=True)
+    'algorithm': bootstrap(MiniBatchKMeans, trainable=True)
   }
 }

@@ -1,8 +1,12 @@
 import numpy as np
+from sklearn.neighbors import NearestNeighbors
+import networkx as nx
 
 def bootstrap(func, trainable):
   def inner(data, args):
     data_raw = data.loc[:, ['x', 'y']].to_numpy();
+    '''if trainable:
+    	args['max_iter'] = 1'''
     cluster = func(**args)
 
     if not trainable:
@@ -11,10 +15,20 @@ def bootstrap(func, trainable):
       }]
 
     results = []
-    for i in range(30):
-      for j in range(5):
-        cluster.fit(data_raw)
-
+    old_centroids = []
+    for i in range(args['n_clusters']):
+      old_centroids.append([0, 0])
+    for i in range(150):
+      cluster.partial_fit(data_raw)
+      centroids = cluster.cluster_centers_
+      for j, centroid in enumerate(centroids):
+        done = True
+        if centroid[0] != old_centroids[j][0] or centroid[1] != old_centroids[j][1]:
+          done = False
+          break
+      if done:
+        break
+      old_centroids = centroids
       results.append({
         'scatter': data.assign(cluster = cluster.predict(data_raw)),
         'boundary': generateNaiveBoundary(cluster, data_raw)
@@ -29,9 +43,10 @@ def generateNaiveBoundary(model, X):
 	xxl = xx.tolist()
 	yyl = yy.tolist()
 	mesh = []
+	dist = xxl[0][0] + xxl[0][1]
 	for i in range(len(xxl)):
 		for j in range(len(xxl[0])):
-			mesh.append([xxl[i][j], yyl[i][j]])
+			mesh.append([xxl[i][j] + dist/2, yyl[i][j] + dist/2])
 	Z = model.predict(np.c_[xx.ravel(), yy.ravel()]).reshape(len(xxl), len(xxl[0]))
 	boundaryIndicies = [0] * len(xxl) * len(xxl[0])
 	boundary = []
@@ -49,4 +64,36 @@ def generateNaiveBoundary(model, X):
 	for i in range(len(boundaryIndicies)):
 		if boundaryIndicies[i] == 1:
 			boundary.append(mesh[i])
+	if len(boundary) > 2:
+		boundary = np.asarray(boundary)
+		clf = NearestNeighbors(2).fit(boundary)
+		G = clf.kneighbors_graph()
+		T = nx.from_scipy_sparse_matrix(G)
+		order = list(nx.dfs_preorder_nodes(T, 0))
+		boundary = (boundary[order]).tolist()
 	return boundary
+
+
+
+'''
+old_centroids = []
+    for i in range(args['n_clusters']):
+      old_centroids.append([0, 0])
+    for i in range(150):
+      cluster.fit(data_raw)
+      centroids = cluster.cluster_centers_
+      for j, centroid in enumerate(centroids):
+        if centroid[0] != old_centroids[j][0] or centroid[j][1] != old_centroids[j][1]:
+          exit = True
+          break
+      if exit:
+        break
+      old_centroids = centroids
+'''
+
+
+
+
+
+
+

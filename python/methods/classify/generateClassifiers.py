@@ -1,6 +1,8 @@
 import os, time
 import numpy as np
 from methods.classify.Counterfactual import generateBoundary
+from sklearn.neighbors import NearestNeighbors
+import networkx as nx
 
 ITERATIONS = 20
 
@@ -112,6 +114,13 @@ def step(classifier, data, labels):
 	recall = (average(interRecall))
 	accuracy = (correct/(correct+incorrect))
 	boundary = generateNaiveBoundary(classifier, data)
+	if len(boundary) > 2:
+		boundary = np.asarray(boundary)
+		clf = NearestNeighbors(2).fit(boundary)
+		G = clf.kneighbors_graph()
+		T = nx.from_scipy_sparse_matrix(G)
+		order = list(nx.dfs_preorder_nodes(T, 0))
+		boundary = (boundary[order]).tolist()
 	return precision, recall, accuracy, boundary, y_pred, correctPreds
 
 
