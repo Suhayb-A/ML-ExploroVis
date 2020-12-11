@@ -29,16 +29,16 @@ method_id : {
 }
 '''
 methods = {
-  'SpectralClustering': {
-    'title': 'Spectral',
-    'parameters': [inputs.Range('n_clusters', 'Number of Clusters', 3, 2, 5), inputs.Hidden('random_state', RANDOM_STATE)],
-    'algorithm': bootstrap(SpectralClustering, trainable=False)
-  },
   'DBSCAN': {
     'title': 'DBSCAN',
     'parameters': [inputs.Range('eps', 'Search Radius', 0.09, 0.05, 0.5, step = 0.01),
     inputs.Range('min_samples', 'Minimum Number of Samples', 5, 1, 25)],
     'algorithm': DBSCAN_HELP(bootstrap(DBSCAN, trainable=False)),
+  },
+  'SpectralClustering': {
+    'title': 'Spectral',
+    'parameters': [inputs.Range('n_clusters', 'Number of Clusters', 3, 2, 5), inputs.Hidden('random_state', RANDOM_STATE)],
+    'algorithm': bootstrap(SpectralClustering, trainable=False)
   },
   'KMeans': {
     'title': 'KMeans',
