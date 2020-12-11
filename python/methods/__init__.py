@@ -35,11 +35,11 @@ config = {
         'title': 'Correctness',
         'values': [{
             'title': 'Correct',
-            'value': 0,
+            'value': 1,
             'color': 'green'
           },{
             'title': 'Incorrect',
-            'value': 1,
+            'value': 0,
             'color': 'red'
           }]
       }
