@@ -2,10 +2,12 @@ import * as d3 from "d3";
 
 export default function draw(
   svg: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
-  value: any,
-  scaleX: d3.ScaleLinear<number, number, never>,
-  scaleY: d3.ScaleLinear<number, number, never>,
-  thumbnail?: boolean
+  {value, scaleX, scaleY, thumbnail}: {
+    value: any,
+    scaleX: d3.ScaleLinear<number, number, never>,
+    scaleY: d3.ScaleLinear<number, number, never>,
+    thumbnail: boolean,
+  }
 ) {
   const data = value.boundary || [];
   const points = svg.selectAll("path").data([data.map((d) => [scaleX(d[0]), scaleY(d[1])])]);

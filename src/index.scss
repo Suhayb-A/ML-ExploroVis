@@ -292,12 +292,9 @@ input:not([type="range"]),
 
 #legend-items {
   margin-top: 8px;
-  max-height: 30vh;
+  max-height: 15vh;
   overflow-y: scroll;
 
-  &::-webkit-scrollbar {
-    display: none;
-  }
   .legend-color {
     &:first-of-type {
       padding-top: 0;

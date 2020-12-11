@@ -2,10 +2,10 @@ import numpy as np
 from sklearn.neighbors import NearestNeighbors
 import networkx as nx
 
-def bootstrap(func, trainable):
+def bootstrap(model, trainable):
   def inner(data, args):
     data_raw = data.loc[:, ['x', 'y']].to_numpy();
-    cluster = func(**args)
+    cluster = model(**args)
 
     if not trainable:
       return [{

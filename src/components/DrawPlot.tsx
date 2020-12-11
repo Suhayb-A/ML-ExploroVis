@@ -66,19 +66,24 @@ class DrawPlot extends React.Component<Props> {
       color: this.props.colorFor(d),
     }));
 
-    this.drawGraphs(svg, { scatter }, this.xy[0], this.xy[1], false);
+    this.drawGraphs(svg, {
+      value: { scatter },
+      scaleX: this.xy[0],
+      scaleY: this.xy[1],
+      thumbnail: false,
+    });
   }
 
   private drawGraphs(
-    ...args: [
-      d3.Selection<d3.BaseType, unknown, HTMLElement, any>, // svg
-      any, // value
-      d3.ScaleLinear<number, number, never>, // scaleX
-      d3.ScaleLinear<number, number, never>, // scaleY
-      boolean? //thumbnail
-    ]
+    svg,
+    props: {
+      value: any;
+      scaleX: d3.ScaleLinear<number, number, never>;
+      scaleY: d3.ScaleLinear<number, number, never>;
+      thumbnail: boolean;
+    }
   ) {
-    Scatter(...args);
+    Scatter(svg, props);
   }
 
   private addpoint(e) {
@@ -97,7 +102,7 @@ class DrawPlot extends React.Component<Props> {
     if ((newTime as any) - (this.timeDelta as any) < DRAW_DRAG_GAP_DELAY_MS)
       return;
 
-    this.addpoint(e)
+    this.addpoint(e);
     this.timeDelta = newTime;
   }
 

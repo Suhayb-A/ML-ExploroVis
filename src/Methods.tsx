@@ -11,6 +11,7 @@ import MainView from "./Mainview";
 interface Props {
   dataSet: DataSet;
   setMethodPath: (path: string) => void;
+  helpOverlays: boolean
 }
 
 async function computeMethod(dataSet, catagoryID, method) {
@@ -224,6 +225,7 @@ function Methods(props: Props) {
         recomputeAndUpdate={recomputeAndUpdate}
         colorFor={colorFor}
         selectedMethodIDX={selectedMethodIDX}
+        helpOverlays={props.helpOverlays}
       />
     </>
   );

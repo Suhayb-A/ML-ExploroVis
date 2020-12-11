@@ -11,7 +11,8 @@ function MainView({
   forceUpdate,
   recomputeAndUpdate,
   colorFor,
-  selectedMethodIDX
+  selectedMethodIDX,
+  helpOverlays
 }: {
   frames?: any;
   method?: any;
@@ -20,6 +21,7 @@ function MainView({
   recomputeAndUpdate: (method) => void
   colorFor: (d) => string;
   selectedMethodIDX: number;
+  helpOverlays: boolean
 }) {
   const [timelineState, setTimelineState] = useState({
     playing: false,
@@ -31,6 +33,7 @@ function MainView({
     <div id="main_container">
       <Loading waitOn={frames}>
         <Timeline
+          helpOverlays={helpOverlays}
           frames={frames}
           colorFor={colorFor}
           state={timelineState}

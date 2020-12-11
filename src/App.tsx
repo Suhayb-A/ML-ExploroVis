@@ -90,6 +90,7 @@ function App() {
           <Methods
             dataSet={dataSet}
             setMethodPath={setMethodPath}
+            helpOverlays={helpActive}
           />
         </div>
       </div>

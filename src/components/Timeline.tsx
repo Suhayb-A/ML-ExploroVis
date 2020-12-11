@@ -15,6 +15,7 @@ interface Props {
   colorFor?: (point: any) => string;
   setState: (s: any) => void;
   state: any;
+  helpOverlays: boolean
 }
 
 function TimeLine(props: Props) {
@@ -75,7 +76,7 @@ function TimeLine(props: Props) {
 
   return (
     <div className="timeline">
-      <Graph frames={props.frames} responsive={true} t={Math.min(state.currentFrame, frameCount)} colorFor={props.colorFor}/>
+      <Graph frames={props.frames} responsive={true} t={Math.min(state.currentFrame, frameCount)} colorFor={props.colorFor} helpOverlays={props.helpOverlays}/>
 
       {frameCount > 0 && (
       <div className="timeline-controls">

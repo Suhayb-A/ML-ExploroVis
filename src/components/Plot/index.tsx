@@ -2,6 +2,7 @@ import React, { createRef } from "react";
 import * as d3 from "d3";
 import Scatter from "./Scatter";
 import Boundary from './Boundary';
+import HelpSearchRadius from "./HelpSearchRadius";
 
 export const PADDING = 15;
 export const THUMBNAIL_PADDING = 8;
@@ -18,17 +19,21 @@ export interface Props {
   colorFor: (point: any) => string;
   thumbnail?: boolean;
   t?: number;
+  helpOverlays: boolean;
 }
 
 const LAYERS = [Boundary, Scatter]
+const HELP_OVERLAYS = [HelpSearchRadius]
 
 class Base extends React.Component<Props> {
   protected svgRef: React.RefObject<SVGSVGElement>;
   protected xy_domains: [[number, number], [number, number]];
   protected layers: d3.Selection<d3.BaseType, unknown, HTMLElement, any>[] = [];
+  protected helpOverlayLayers: d3.Selection<d3.BaseType, unknown, HTMLElement, any>[] = [];
 
   static defaultProps = {
     responsive: false,
+    helpOverlays: false
   };
 
   constructor(props: Props) {
@@ -42,6 +47,7 @@ class Base extends React.Component<Props> {
     this.updateDimentions();
     const svg = d3.select(this.svgRef.current);
     this.layers = LAYERS.map(_ => svg.append("g"));
+    this.helpOverlayLayers = HELP_OVERLAYS.map(_ => svg.append("g"));
 
     if (!this.props.responsive) return;
     window.addEventListener("resize", this.updateDimentions);
@@ -120,19 +126,28 @@ class Base extends React.Component<Props> {
     );
 
     const frame = this.getFrame(this.props.t);
-    this.drawGraphs(frame, x, y, this.props.thumbnail);
+    this.drawGraphs({
+      value: frame,
+      scaleX: x,
+      scaleY: y,
+      thumbnail: this.props.thumbnail,
+    });
   }
 
   private drawGraphs(
-    ...args: [
-      any, // value
-      d3.ScaleLinear<number, number, never>, // scaleX
-      d3.ScaleLinear<number, number, never>, // scaleY
-      boolean? //thumbnail
-    ]
+    props: {
+      value: any,
+      scaleX: d3.ScaleLinear<number, number, never>,
+      scaleY: d3.ScaleLinear<number, number, never>,
+      thumbnail: boolean,
+    }
   ) {
     this.layers.forEach((layer, idx) => {
-      LAYERS[idx](layer, ...args)
+      LAYERS[idx](layer, props)
+    })
+
+    this.helpOverlayLayers.forEach((layer, idx) => {
+      HELP_OVERLAYS[idx](layer, props, this.props.helpOverlays)
     })
   }
 

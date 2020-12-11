@@ -3,6 +3,15 @@ from methods import inputs
 from methods.cluster.generateCluster import bootstrap;
 RANDOM_STATE = 10;
 
+def DBSCAN_HELP(bootstrapFunc):
+  def inner(data, args):
+    results = bootstrapFunc(data, args)
+    for result in results:
+      result['help'] = {"searchRadius": args['eps']};
+
+    return results;
+  return inner;
+
 '''
 method_id : {
   title: 'Method title",
@@ -27,9 +36,9 @@ methods = {
   },
   'DBSCAN': {
     'title': 'DBSCAN',
-    'parameters': [inputs.Range('eps', 'Search Radius', 0.25, 0.05, 0.5, step = 0.01),
+    'parameters': [inputs.Range('eps', 'Search Radius', 0.09, 0.05, 0.5, step = 0.01),
     inputs.Range('min_samples', 'Minimum Number of Samples', 5, 1, 25)],
-    'algorithm': bootstrap(DBSCAN, trainable=False),
+    'algorithm': DBSCAN_HELP(bootstrap(DBSCAN, trainable=False)),
   },
   'KMeans': {
     'title': 'KMeans',
