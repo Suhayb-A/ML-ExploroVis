@@ -13,11 +13,6 @@ interface Props {
   setMethodPath: (path: string) => void;
 }
 
-interface DataSource {
-  parameters: any;
-  frames?: any;
-}
-
 async function computeMethod(dataSet, catagoryID, method) {
   const parameters = method.parameters;
   const args = parameters

@@ -10,13 +10,6 @@ const FRAME_RATE_MS = 1000 / FRAME_RATE;
 const MIN_SPEED = 0.25;
 const MAX_SPEED = 2;
 
-
-interface State {
-  playing: boolean,
-  step: boolean,
-  currentFrame: number,
-}
-
 interface Props {
   frames: any[]; // An array of values
   colorFor?: (point: any) => string;
