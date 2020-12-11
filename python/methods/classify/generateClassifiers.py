@@ -62,7 +62,10 @@ def generateNaiveBoundary(model, X):
 	boundary = []
 	for i in range(len(xxl)-1):
 		for j in range(len(xxl[0])-1):
-			boundaryIndicies[i*len(xxl)+j] = 1 if (Z[i,j] != Z[i,j+1] or Z[i,j] != Z[i+1,j]) else 0
+			try:
+				boundaryIndicies[i*len(xxl)+j] = 1 if (Z[i,j] != Z[i,j+1] or Z[i,j] != Z[i+1,j]) else 0
+			except:
+				break
 	for i in range(len(boundaryIndicies)):
 		if boundaryIndicies[i] == 1:
 			boundary.append(mesh[i])
