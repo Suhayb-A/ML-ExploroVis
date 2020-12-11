@@ -54,7 +54,7 @@ function App() {
   const dataSet = dataSets[selectedDataIDX];
   return (
     <main>
-      <div id="main-application">
+      <div id="main-application" className={helpActive ? 'help-active' : ''}>
         <div id="datasets">
           <div id="datasets-navbar">
             <h3>Data Sets</h3>
