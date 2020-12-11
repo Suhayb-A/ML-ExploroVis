@@ -23,20 +23,10 @@ def generate_counterfactual(model, x, feature, step_size=0.01, epsilon=0.01, max
 		# Check if left is appropriate counterfactual
 		y_prime_l = model.predict(x_prime_l)[0]
 		if y_prime_l != y_class:
-			'''print('---------')
-			print(y_prime_l)
-			print(y_class)
-			print(steps)
-			print('---------')'''
 			return x_prime_l
 		y_prime_r = model.predict(x_prime_r)[0]
 		# Do same for right
 		if y_prime_r != y_class:
-			'''print('---------')
-			print(y_prime_r)
-			print(y_class)
-			print(steps)
-			print('---------')'''
 			return x_prime_r
 		steps += 1
 	return None

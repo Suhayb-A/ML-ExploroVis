@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Loading from "./Loading";
 import Stats from "./components/Stats";
 import Hyperparameters from "./Hyperparameters";

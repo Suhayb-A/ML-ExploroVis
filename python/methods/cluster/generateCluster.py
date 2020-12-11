@@ -75,25 +75,6 @@ def generateNaiveBoundary(model, X):
 
 
 
-'''
-old_centroids = []
-    for i in range(args['n_clusters']):
-      old_centroids.append([0, 0])
-    for i in range(150):
-      cluster.fit(data_raw)
-      centroids = cluster.cluster_centers_
-      for j, centroid in enumerate(centroids):
-        if centroid[0] != old_centroids[j][0] or centroid[j][1] != old_centroids[j][1]:
-          exit = True
-          break
-      if exit:
-        break
-      old_centroids = centroids
-'''
-
-
-
-
 
 
 

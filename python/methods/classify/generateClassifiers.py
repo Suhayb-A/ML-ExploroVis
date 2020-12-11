@@ -13,19 +13,13 @@ def bootstrap(func, trainable):
 		results = []
 		labels = data.loc[:, 'g']
 
-		durration = 0;
 		npdata = data.loc[:, ['x', 'y']].to_numpy();
 		for i in range(ITERATIONS if trainable else 1):
-			startTime = time.time()
-
 			if trainable:
 				for j in range(10):
 					classifier.partial_fit(npdata, labels, classes=np.unique(labels))
 			else:
 				classifier.fit(npdata, labels)
-
-			endTime = time.time()
-			duration = endTime - startTime
 
 			p, r, a, boundary, pred, corr = step(classifier, npdata, labels)
 
@@ -36,7 +30,6 @@ def bootstrap(func, trainable):
 					'precision': p,
 					'recall': r,
 					'accuracy': a,
-					# 'duration': durration,
 					}
 			})
 
