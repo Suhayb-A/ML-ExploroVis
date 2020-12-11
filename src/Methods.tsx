@@ -44,7 +44,11 @@ function Methods(props: Props) {
   // computed frames.
   const [methods, setMethods] = useState(undefined);
   const [, updater] = useState(0);
-  const [currentFrame, setCurrentFrame] = useState(0);
+  const [timelineState, setTimelineState] = useState({
+    playing: false,
+    step: false,
+    currentFrame: 0,
+  });
 
   function forceUpdate() {
     updater((o) => o + 1);
@@ -226,7 +230,12 @@ function Methods(props: Props) {
       </div>
       <div id="main_container">
         <Loading waitOn={frames}>
-          <Timeline frames={frames} colorFor={colorFor} currentFrame={currentFrame} setCurrentFrame={setCurrentFrame} />
+          <Timeline
+            frames={frames}
+            colorFor={colorFor}
+            state={timelineState}
+            setState={setTimelineState}
+          />
         </Loading>
         <Hyperparameters
           title={method.title}
@@ -246,7 +255,13 @@ function Methods(props: Props) {
           {method._id === "ann" && (
             <div id="classify-stats">
               <Loading waitOn={frames}>
-                <Stats frames={frames} currentFrame={currentFrame} setCurrentFrame={setCurrentFrame}/>{" "}
+                <Stats
+                  frames={frames}
+                  currentFrame={timelineState.currentFrame}
+                  setCurrentFrame={(currentFrame) => {
+                    setTimelineState((state) => ({ ...state, currentFrame }));
+                  }}
+                />{" "}
               </Loading>
             </div>
           )}

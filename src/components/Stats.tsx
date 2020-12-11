@@ -41,8 +41,7 @@ class Stats extends React.Component<Props, State> {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps !== this.props || !this.init)
-      this.drawGraph();
+    if (prevProps !== this.props || !this.init) this.drawGraph();
   }
 
   private drawGraph() {
@@ -108,39 +107,43 @@ class Stats extends React.Component<Props, State> {
     frameLine.exit().remove();
 
     const hoverLine = svg
-    .append("line")
-    .attr("class", "hoverline")
-    .attr("y1", 15)
-    .attr("y2", svgElement.clientHeight - 15)
-    .attr("stroke", "rgba(0,0,0,0.15)")
-    .attr("stroke-width", 1)
-    .attr("stroke-linecap", "round")
-    .attr("opacity", 0);
+      .append("line")
+      .attr("class", "hoverline")
+      .attr("y1", 15)
+      .attr("y2", svgElement.clientHeight - 15)
+      .attr("stroke", "rgba(0,0,0,0.15)")
+      .attr("stroke-width", 1)
+      .attr("stroke-linecap", "round")
+      .attr("opacity", 0);
 
     svg
-    .on("mousemove", (e) => {
-      let [x, _] = d3.pointer(e);
-      x = Math.min(Math.max(x, 41), svgElement.clientWidth - 15);
-      hoverLine.attr("opacity", 1).attr("x1", x).attr("x2", x);
-      this.setState(state => {
-        const hoverPoint = Math.floor(X.invert(x));
-        if (state.hoverPoint === hoverPoint) return null;
-        return {hoverPoint}
-      });
-    })
-    .on("mouseleave", () => {
-      hoverLine.attr("opacity", 0);
-      this.setState(state => {
-        const hoverPoint = undefined;
-        if (state.hoverPoint === hoverPoint) return null;
-        return {hoverPoint}
-      });
-    }).on('click', (e) => {
-      let [x, _] = d3.pointer(e);
-      x = Math.min(Math.max(x, 41), svgElement.clientWidth - 15);
-      this.props.setCurrentFrame(X.invert(x))
-    });
+      .on("mousemove", (e) => {
+        let [x, _] = d3.pointer(e);
+        x = Math.min(Math.max(x, 41), svgElement.clientWidth - 15);
+        hoverLine.attr("opacity", 1).attr("x1", x).attr("x2", x);
+        this.setState((state) => {
+          const hoverPoint = Math.floor(X.invert(x));
+          if (state.hoverPoint === hoverPoint) return null;
+          return { hoverPoint };
+        });
 
+        if (e.buttons === 1) {
+          this.props.setCurrentFrame(X.invert(x));
+        }
+      })
+      .on("mouseleave", () => {
+        hoverLine.attr("opacity", 0);
+        this.setState((state) => {
+          const hoverPoint = undefined;
+          if (state.hoverPoint === hoverPoint) return null;
+          return { hoverPoint };
+        });
+      })
+      .on("click", (e) => {
+        let [x, _] = d3.pointer(e);
+        x = Math.min(Math.max(x, 41), svgElement.clientWidth - 15);
+        this.props.setCurrentFrame(X.invert(x));
+      });
 
     if (!this.init) {
       const yAxis = d3.axisLeft(Y).ticks(2).tickFormat(Formatter);
@@ -156,18 +159,28 @@ class Stats extends React.Component<Props, State> {
   render() {
     const frames = this.props.frames;
     let currentFrame = this.props.currentFrame;
-    let currentFrameNumber = Number.isFinite(this.state.hoverPoint) ? this.state.hoverPoint : currentFrame;
+    let currentFrameNumber = Number.isFinite(this.state.hoverPoint)
+      ? this.state.hoverPoint
+      : currentFrame;
     currentFrameNumber = Math.floor(currentFrameNumber);
     const stats = (frames[currentFrameNumber] || {}).stats || [];
 
-    return <div>
-      <svg className="stats" ref={this.svgRef} />
-      <div className="stats-values">
-        {Object.keys(stats).map((key, i) => <div style={{'background': getColor(i + 1)}}>
-          <b>{key.slice(0,1).toUpperCase()}{key.slice(1)}:</b> {Formatter(stats[key])}
-        </div>)}
+    return (
+      <div>
+        <svg className="stats" ref={this.svgRef} />
+        <div className="stats-values">
+          {Object.keys(stats).map((key, i) => (
+            <div style={{ background: getColor(i + 1) }}>
+              <b>
+                {key.slice(0, 1).toUpperCase()}
+                {key.slice(1)}:
+              </b>{" "}
+              {Formatter(stats[key])}
+            </div>
+          ))}
+        </div>
       </div>
-    </div>;
+    );
   }
 }
 

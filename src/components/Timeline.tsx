@@ -10,34 +10,26 @@ const FRAME_RATE_MS = 1000 / FRAME_RATE;
 const MIN_SPEED = 0.25;
 const MAX_SPEED = 2;
 
+
+interface State {
+  playing: boolean,
+  step: boolean,
+  currentFrame: number,
+}
+
 interface Props {
   frames: any[]; // An array of values
   colorFor?: (point: any) => string;
-  setCurrentFrame: (Number) => void;
-  currentFrame: number;
+  setState: (s: any) => void;
+  state: any;
 }
 
 function TimeLine(props: Props) {
-  const [state, setState] = useState({
-    playing: false,
-    step: false,
-    currentFrame: 0,
-  });
-
+  const [state, setState] = [props.state, props.setState];
   const [speed, setSpeed] = useState(1);
 
   const frameCount = props.frames.length - 1;
   const interval = useRef(null);
-
-  useEffect(() => {
-    props.setCurrentFrame(state.currentFrame);
-  }, [state.currentFrame]);
-
-  useEffect(() => {
-    setState((state) => ({...state, currentFrame: props.currentFrame}));
-  }, [props.currentFrame]);
-
-
 
   useEffect(() => {
     setState({

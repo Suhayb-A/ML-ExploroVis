@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import clear from "./assets/clear.svg";
 import DrawPlot from "./components/DrawPlot";
 import { csvFormat } from "d3";
-const MIN_POINTS = 10;
+const MIN_POINTS = 20;
 
 let UNNAMED_COUNTER = -1;
 const CLUSTERS = [0, 1];
