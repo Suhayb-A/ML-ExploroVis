@@ -9,6 +9,7 @@ import { getColor } from "./components/Plot";
 import Config from "./congfig.json";
 import { compute } from "./compute";
 import Loading from "./Loading";
+import Stats from "./components/Stats";
 
 interface Props {
   dataSet: DataSet;
@@ -16,21 +17,21 @@ interface Props {
 }
 
 interface DataSource {
-  parameters: any
-  frames?: any
+  parameters: any;
+  frames?: any;
 }
 
 async function computeMethod(dataSet, catagoryID, method) {
-    const parameters = method.parameters;
-    const args = parameters
-      ? parameters.reduce((r, v) => {
-          r[v["_id"]] = v["value"]["value"];
-          return r;
-        }, {})
-      : {};
+  const parameters = method.parameters;
+  const args = parameters
+    ? parameters.reduce((r, v) => {
+        r[v["_id"]] = v["value"]["value"];
+        return r;
+      }, {})
+    : {};
 
-    return await compute(dataSet.csv, catagoryID, method._id, args);
-  }
+  return await compute(dataSet.csv, catagoryID, method._id, args);
+}
 
 function Methods(props: Props) {
   const categories = Config;
@@ -43,9 +44,10 @@ function Methods(props: Props) {
   // computed frames.
   const [methods, setMethods] = useState(undefined);
   const [, updater] = useState(0);
+  const [currentFrame, setCurrentFrame] = useState(0);
 
   function forceUpdate() {
-    updater(o => o + 1);
+    updater((o) => o + 1);
   }
 
   useEffect(() => {
@@ -60,14 +62,17 @@ function Methods(props: Props) {
   }, [selectedCategory, selectedMethodIDX, props]);
 
   useEffect(() => {
-    const newMethods = selectedCategory.types.map(v => ({...v}));
-    setMethods(newMethods)
+    const newMethods = selectedCategory.types.map((v) => ({ ...v }));
+    setMethods(newMethods);
   }, [selectedCategory, props.dataSet]);
-
 
   async function recomputeAndUpdate(method) {
     const params = method.parameters;
-    const frames = await computeMethod(props.dataSet, selectedCategory._id, method);
+    const frames = await computeMethod(
+      props.dataSet,
+      selectedCategory._id,
+      method
+    );
     if (params !== method.parameters) return; //A new request was sent.
     (method as any).frames = frames;
     forceUpdate();
@@ -77,12 +82,11 @@ function Methods(props: Props) {
     if (!methods) return;
 
     (async function _() {
-      methods.forEach(method => {
-          recomputeAndUpdate(method);
+      methods.forEach((method) => {
+        recomputeAndUpdate(method);
       });
     })();
   }, [methods]);
-
 
   function addMethod(newMethod: { _id: string; title: string }) {
     // Get the source method.
@@ -107,9 +111,9 @@ function Methods(props: Props) {
     };
 
     selectedCategory.types.push(newtype);
-    newtype = {...newtype}
+    newtype = { ...newtype };
     methods.push(newtype);
-    recomputeAndUpdate(newtype)
+    recomputeAndUpdate(newtype);
     forceUpdate();
   }
 
@@ -117,8 +121,7 @@ function Methods(props: Props) {
   if (!methods || !method || !colorInfo) return <> </>;
 
   const colors = (colorInfo.values || []).reduce((r, v) => {
-    if (v.color)
-      r[v.value] = v.color;
+    if (v.color) r[v.value] = v.color;
     return r;
   }, {});
 
@@ -132,18 +135,24 @@ function Methods(props: Props) {
 
   const frames = methods[selectedMethodIDX].frames;
   const lastFrameIdx = (frames || []).length - 1;
-  const hasBound = !(!frames || !frames[lastFrameIdx] || !frames[lastFrameIdx].boundary);
+  const hasBound = !(
+    !frames ||
+    !frames[lastFrameIdx] ||
+    !frames[lastFrameIdx].boundary
+  );
 
   let colorValues = colorInfo.values;
   if (!colorValues) {
     if (!frames || !frames[lastFrameIdx] || !frames[lastFrameIdx].scatter) {
       colorValues = [];
     } else {
-      const values = Array.from(new Set(frames[lastFrameIdx].scatter.map(p => p[colorInfo._id]))).sort((a: any, b: any) => a - b);
+      const values = Array.from(
+        new Set(frames[lastFrameIdx].scatter.map((p) => p[colorInfo._id]))
+      ).sort((a: any, b: any) => a - b);
       colorValues = values.map((v, i) => ({
-        title:  v === -1 ? "Not Clustered" : `Cluster ${i + 1}`,
+        title: v === -1 ? "Not Clustered" : `Cluster ${i + 1}`,
         value: v as any,
-        color: getColor(v as any)
+        color: getColor(v as any),
       })) as any;
     }
   }
@@ -162,7 +171,7 @@ function Methods(props: Props) {
           ))}
         </select>
         <div id="legend">
-          <label>Color</label>
+          <label id="legend-color-title">Color</label>
           {selectedCategory.colors.length > 1 && (
             <select
               value={colorOn}
@@ -176,17 +185,19 @@ function Methods(props: Props) {
             </select>
           )}
           <div id="legend-items">
-          {colorValues.map((color) => (
-            <div key={color.value} className="legend-color">
-              <div style={{ background: color.color }} />
-              {color.title}
-            </div>
-          ))}
+            {colorValues.map((color) => (
+              <div key={color.value} className="legend-color">
+                <div style={{ background: color.color }} />
+                {color.title}
+              </div>
+            ))}
 
-          {hasBound && <div className="legend-bound">
-              <div/>
-              Boundary
-            </div>}
+            {hasBound && (
+              <div className="legend-bound">
+                <div />
+                Boundary
+              </div>
+            )}
           </div>
         </div>
         <ScrollView
@@ -215,10 +226,7 @@ function Methods(props: Props) {
       </div>
       <div id="main_container">
         <Loading waitOn={frames}>
-          <Timeline
-            frames={frames}
-            colorFor={colorFor}
-          />
+          <Timeline frames={frames} colorFor={colorFor} currentFrame={currentFrame} setCurrentFrame={setCurrentFrame} />
         </Loading>
         <Hyperparameters
           title={method.title}
@@ -234,12 +242,18 @@ function Methods(props: Props) {
             forceUpdate();
             recomputeAndUpdate(method);
           }}
-        />
+        >
+          {method._id === "ann" && (
+            <div id="classify-stats">
+              <Loading waitOn={frames}>
+                <Stats frames={frames} currentFrame={currentFrame} setCurrentFrame={setCurrentFrame}/>{" "}
+              </Loading>
+            </div>
+          )}
+        </Hyperparameters>
       </div>
     </>
   );
 }
-
-
 
 export default Methods;

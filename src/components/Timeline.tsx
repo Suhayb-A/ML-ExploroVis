@@ -13,6 +13,8 @@ const MAX_SPEED = 2;
 interface Props {
   frames: any[]; // An array of values
   colorFor?: (point: any) => string;
+  setCurrentFrame: (Number) => void;
+  currentFrame: number;
 }
 
 function TimeLine(props: Props) {
@@ -26,6 +28,16 @@ function TimeLine(props: Props) {
 
   const frameCount = props.frames.length - 1;
   const interval = useRef(null);
+
+  useEffect(() => {
+    props.setCurrentFrame(state.currentFrame);
+  }, [state.currentFrame]);
+
+  useEffect(() => {
+    setState((state) => ({...state, currentFrame: props.currentFrame}));
+  }, [props.currentFrame]);
+
+
 
   useEffect(() => {
     setState({

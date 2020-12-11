@@ -36,7 +36,7 @@ def bootstrap(func, trainable):
 					'precision': p,
 					'recall': r,
 					'accuracy': a,
-					'duration': durration,
+					# 'duration': durration,
 					}
 			})
 
