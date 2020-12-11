@@ -83,7 +83,6 @@ function Methods(props: Props) {
     })();
   }, [methods]);
 
-  if (!methods || !method) return <> </>;
 
   function addMethod(newMethod: { _id: string; title: string }) {
     // Get the source method.
@@ -115,6 +114,8 @@ function Methods(props: Props) {
   }
 
   const colorInfo = selectedCategory.colors[colorOn];
+  if (!methods || !method || !colorInfo) return <> </>;
+
   const colors = (colorInfo.values || []).reduce((r, v) => {
     if (v.color)
       r[v.value] = v.color;
