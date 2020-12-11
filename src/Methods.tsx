@@ -225,8 +225,13 @@ function Methods(props: Props) {
           setParameters={(parameters) => {
             method.parameters = parameters;
             methods[selectedMethodIDX].parameters = parameters;
-            recomputeAndUpdate(methods[selectedMethodIDX]);
             forceUpdate();
+          }}
+          onRun={() => {
+            const method = methods[selectedMethodIDX];
+            delete (method as any).frames;
+            forceUpdate();
+            recomputeAndUpdate(method);
           }}
         />
       </div>

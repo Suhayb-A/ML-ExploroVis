@@ -6,18 +6,20 @@ function Hyperparameters({
   title,
   parameters,
   setParameters,
+  onRun
 }: {
   title: string;
   parameters: any;
   setParameters: (parameters: any) => void;
-  run?: any;
+  onRun?: () => void;
 }) {
+  const visableParameters = parameters ? parameters.filter(p =>  p.tag !== 'hidden'): undefined;
   return (
     <div id="hyperparameter">
       <h3>{title}</h3>
       <div id="hyperparameter-options">
-        {parameters &&
-          parameters.filter(p =>  p.tag !== 'hidden').map((param, i) => {
+        {visableParameters &&
+          visableParameters.map((param, i) => {
             const Input = param.tag;
             const isNumber = NUMBER_TYPES.indexOf(param.value.type) !== -1;
 
@@ -71,6 +73,9 @@ function Hyperparameters({
             );
           })}
       </div>
+      {(visableParameters && visableParameters.length && onRun)? <div className="button add-button" onClick={onRun}>
+        Run
+      </div> : <></>}
     </div>
   );
 }
