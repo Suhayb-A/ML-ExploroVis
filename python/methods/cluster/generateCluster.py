@@ -5,8 +5,6 @@ import networkx as nx
 def bootstrap(func, trainable):
   def inner(data, args):
     data_raw = data.loc[:, ['x', 'y']].to_numpy();
-    '''if trainable:
-    	args['max_iter'] = 1'''
     cluster = func(**args)
 
     if not trainable:
