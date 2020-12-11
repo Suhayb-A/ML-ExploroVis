@@ -162,7 +162,6 @@ function Methods(props: Props) {
         </select>
         <div id="legend">
           <label>Color</label>
-          <div id="legend-items">
           {selectedCategory.colors.length > 1 && (
             <select
               value={colorOn}
@@ -175,6 +174,7 @@ function Methods(props: Props) {
               ))}
             </select>
           )}
+          <div id="legend-items">
           {colorValues.map((color) => (
             <div key={color.value} className="legend-color">
               <div style={{ background: color.color }} />
