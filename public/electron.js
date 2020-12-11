@@ -49,17 +49,23 @@ function createPyProc() {
     },
   };
 
-  if (isDev)
-    pyProc = require("child_process").spawn("python3", [script, port], {
-      ...options,
-      stdio: "inherit",
-    });
-  else pyProc = require("child_process").spawn(script, [port], options);
+  function spawn() {
+    if (isDev)
+      pyProc = require("child_process").spawn("python3", [script, port], {
+        ...options,
+        stdio: "inherit",
+      });
+    else pyProc = require("child_process").spawn(script, [port], options);
 
-  // Print the output of the python program
-  if (pyProc != null) {
-    console.log("child process success on port " + port);
+    // Print the output of the python program
+    if (pyProc != null) {
+      console.log("child process success on port " + port);
+      pyProc.on('exit', () => {
+        spawn();
+      });
+    }
   }
+  spawn();
 }
 
 function exitPyProc() {
@@ -76,10 +82,10 @@ app.on("will-quit", exitPyProc);
 let mainWindow;
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 800,
-    minWidth: 800,
-    minHeight: 800,
+    width: 900,
+    height: 900,
+    minWidth: 900,
+    minHeight: 900,
     title: APP_NAME,
     resizable: true,
     webPreferences: {

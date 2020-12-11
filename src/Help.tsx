@@ -20,22 +20,12 @@ function getMarkdown(path: string, fallback: string) {
 
 function Help({
   active,
-  selectedDataSet,
   methodPath,
 }: {
   active: boolean;
-  selectedDataSet: any;
   methodPath: string;
 }) {
-  const [dataSetContent, setDataSetContent] = useState('');
   const [methodContent, setMethodContent] = useState('');
-
-  useEffect(() => {
-    if (!selectedDataSet || !active) return;
-    setDataSetContent(
-      getMarkdown(`data/${selectedDataSet.title}`, "data/default")
-      );
-  }, [selectedDataSet, active]);
 
   useEffect(() => {
     if (!active) return; // Don't fetch when hidden.
@@ -45,9 +35,6 @@ function Help({
   return (
     <div id="help-menu" className={active ? " active" : ""}>
       <div id="help-menu-content">
-        <div id="help-data-set">
-          <ReactMarkdown children={dataSetContent} />
-        </div>
         <div id="help-content">
           <ReactMarkdown children={methodContent} />
         </div>

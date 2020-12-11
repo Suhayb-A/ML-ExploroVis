@@ -65,7 +65,7 @@ methods = {
     'parameters': [],
     'algorithm': bootstrap(GaussianNB, trainable = False)
   },
-  'ANN' : {
+  'random_forrest' : {
     'title': 'Random Forrest',
     'parameters': [inputs.Hidden('random_state', RANDOM_STATE)],
     'algorithm': bootstrap(RandomForestClassifier, trainable = False)

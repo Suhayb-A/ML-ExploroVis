@@ -95,7 +95,6 @@ function App() {
       </div>
       <Help
         active={helpActive}
-        selectedDataSet={dataSet}
         methodPath={methodPath}
       />
     </main>

@@ -1,9 +1,7 @@
 import React, { createRef } from "react";
 import * as d3 from "d3";
-import { color } from "d3";
 import { getColor } from "./Plot";
 
-const DRAW_DRAG_GAP_DELAY_MS = 50;
 const Formatter = d3.format(".0%");
 export interface Props {
   frames?: any[];
@@ -122,7 +120,7 @@ class Stats extends React.Component<Props, State> {
         x = Math.min(Math.max(x, 41), svgElement.clientWidth - 15);
         hoverLine.attr("opacity", 1).attr("x1", x).attr("x2", x);
         this.setState((state) => {
-          const hoverPoint = Math.floor(X.invert(x));
+          const hoverPoint = X.invert(x);
           if (state.hoverPoint === hoverPoint) return null;
           return { hoverPoint };
         });
@@ -159,11 +157,28 @@ class Stats extends React.Component<Props, State> {
   render() {
     const frames = this.props.frames;
     let currentFrame = this.props.currentFrame;
-    let currentFrameNumber = Number.isFinite(this.state.hoverPoint)
+    let t = Number.isFinite(this.state.hoverPoint)
       ? this.state.hoverPoint
       : currentFrame;
-    currentFrameNumber = Math.floor(currentFrameNumber);
-    const stats = (frames[currentFrameNumber] || {}).stats || [];
+    let stats = {};
+
+    if (t === undefined || t === null) {
+      stats = frames[frames.length - 1].stats;
+    } else {
+      const t0 = Math.floor(t);
+
+      if (!frames[t0 + 1]) {
+        stats = frames[t0].stats;
+      } else {
+        const interpolate = d3.interpolate(
+          frames[t0].stats,
+          frames[t0 + 1].stats
+        );
+        stats = interpolate(t - t0);
+      }
+    }
+
+    stats = stats || {};
 
     return (
       <div>

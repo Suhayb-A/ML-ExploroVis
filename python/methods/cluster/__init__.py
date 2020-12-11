@@ -20,7 +20,7 @@ method_id : {
 }
 '''
 methods = {
-  'Spectral': {
+  'SpectralClustering': {
     'title': 'Spectral',
     'parameters': [inputs.Range('n_clusters', 'Number of Clusters', 3, 2, 5), inputs.Hidden('random_state', RANDOM_STATE)],
     'algorithm': bootstrap(SpectralClustering, trainable=False)

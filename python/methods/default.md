@@ -1,6 +1,1 @@
-# Method
-
-## Clustering
-
-## Classification
 

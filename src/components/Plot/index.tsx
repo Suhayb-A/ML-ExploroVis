@@ -3,7 +3,7 @@ import * as d3 from "d3";
 import Scatter from "./Scatter";
 import Boundary from './Boundary';
 
-export const PADDING = 8;
+export const PADDING = 15;
 export const COLORS = ["black", ...d3.schemeCategory10];
 
 export function getColor(index: number | string) {

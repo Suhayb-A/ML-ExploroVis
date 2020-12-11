@@ -49,14 +49,16 @@ $help-menu-width: 320px;
 
   transition: width 0.35s ease-in-out;
   &.active {
-    width: $help-menu-width;
+    min-width: $help-menu-width;
+    max-height: 100vh;
+    overflow-y: scroll;
   }
 
   #help-menu-content {
     width: $help-menu-width;
     > div {
       display: inline-block;
-      padding: 0 15px;
+      padding: 15px 15px;
     }
   }
 
