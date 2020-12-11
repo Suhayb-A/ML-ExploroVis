@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from "react";
 import ScrollView from "./components/ScrollView";
-import Timeline from "./components/Timeline";
 import { DataSet } from "./data";
-import Hyperparameters from "./Hyperparameters";
 import Popup from "reactjs-popup";
 import ModelEditor from "./ModelEditor";
 import { getColor } from "./components/Plot";
 import Config from "./congfig.json";
 import { compute } from "./compute";
-import Loading from "./Loading";
-import Stats from "./components/Stats";
+import MainView from "./Mainview";
 
 interface Props {
   dataSet: DataSet;
@@ -40,15 +37,11 @@ function Methods(props: Props) {
   const selectedCategory = categories[selectedCategoryIDX];
   const [colorOn, setColorOn] = useState(0);
   const method = selectedCategory.types[selectedMethodIDX];
+
   // A copy of selectedCategory.types tied to the current dataset & contains the
   // computed frames.
   const [methods, setMethods] = useState(undefined);
   const [, updater] = useState(0);
-  const [timelineState, setTimelineState] = useState({
-    playing: false,
-    step: false,
-    currentFrame: 0,
-  });
 
   function forceUpdate() {
     updater((o) => o + 1);
@@ -228,45 +221,15 @@ function Methods(props: Props) {
           )}
         </Popup>
       </div>
-      <div id="main_container">
-        <Loading waitOn={frames}>
-          <Timeline
-            frames={frames}
-            colorFor={colorFor}
-            state={timelineState}
-            setState={setTimelineState}
-          />
-        </Loading>
-        <Hyperparameters
-          title={method.title}
-          parameters={method.parameters}
-          setParameters={(parameters) => {
-            method.parameters = parameters;
-            methods[selectedMethodIDX].parameters = parameters;
-            forceUpdate();
-          }}
-          onRun={() => {
-            const method = methods[selectedMethodIDX];
-            delete (method as any).frames;
-            forceUpdate();
-            recomputeAndUpdate(method);
-          }}
-        >
-          {method._id === "ann" && (
-            <div id="classify-stats">
-              <Loading waitOn={frames}>
-                <Stats
-                  frames={frames}
-                  currentFrame={timelineState.currentFrame}
-                  setCurrentFrame={(currentFrame) => {
-                    setTimelineState((state) => ({ ...state, currentFrame }));
-                  }}
-                />{" "}
-              </Loading>
-            </div>
-          )}
-        </Hyperparameters>
-      </div>
+      <MainView
+        frames={frames}
+        method={method}
+        methods={methods}
+        forceUpdate={forceUpdate}
+        recomputeAndUpdate={recomputeAndUpdate}
+        colorFor={colorFor}
+        selectedMethodIDX={selectedMethodIDX}
+      />
     </>
   );
 }

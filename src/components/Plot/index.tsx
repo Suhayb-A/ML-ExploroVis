@@ -4,6 +4,7 @@ import Scatter from "./Scatter";
 import Boundary from './Boundary';
 
 export const PADDING = 15;
+export const THUMBNAIL_PADDING = 8;
 export const COLORS = ["black", ...d3.schemeCategory10];
 
 export function getColor(index: number | string) {
@@ -106,6 +107,7 @@ class Base extends React.Component<Props> {
     if (!this.props.frames) return;
     const base = this.props.frames[0];
     if (!base || !base.scatter) return;
+    const padding = this.props.thumbnail ? THUMBNAIL_PADDING : PADDING;
 
     const svgElement = this.svgRef.current;
     const dims = [svgElement.clientWidth, svgElement.clientHeight];
@@ -114,7 +116,7 @@ class Base extends React.Component<Props> {
       d3
         .scaleLinear()
         .domain(domain)
-        .range([PADDING, dims[idx] - PADDING])
+        .range([padding, dims[idx] - padding])
     );
 
     const frame = this.getFrame(this.props.t);
