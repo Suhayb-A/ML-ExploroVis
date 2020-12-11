@@ -38,18 +38,18 @@ methods = {
     'title': 'Artificial Neural Network',
     'parameters': [inputs.Range('neurons_per_layer', 'Neurons Per Layer', 16, 3, 64),
       inputs.Range('layers', 'Number of Layers', 2, 1, 5),
-      inputs.Select('activation', 'Activation Function', 'relu', ['identity', 'logistic', 'tanh', {'relu': 'Rectified Linear Unit'}])],
+      inputs.Select('activation', 'Activation Function', 'relu', [{'identity': 'Identity / no-op activation'}, {'logistic': 'Logistic Sigmoid'}, {'tanh': 'Hyperbolic tan'}, {'relu': 'Rectified Linear Unit'}])],
     'algorithm': ann
   },
   'KNN' : {
     'title': 'K-Nearest Neighbor',
-    'parameters': [inputs.Range('n_neighbors', 'K', 3, 1, 9)],
+    'parameters': [inputs.Range('n_neighbors', 'Number of Neighbors', 3, 1, 9)],
     'algorithm': bootstrap(KNeighborsClassifier, trainable = False)
   },
   'SVM' : {
     'title': 'Support Vector Machine',
     'parameters': [inputs.Range('C', 'Regularization parameter', 1.0, 0.1, 1, step = 0.01),
-     inputs.Select('kernel', 'Kernel', 'linear', ['linear', 'rbf', 'sigmoid', 'poly']),
+     inputs.Select('kernel', 'Kernel', 'linear', [{'linear': 'Linear'}, {'rbf': 'rbf'}, {'sigmoid': 'Sigmoid'}, {'poly':'Poly'}]),
      inputs.Range('degree', 'Degree', 3, 3, 5)],
     'algorithm': bootstrap(SVC, trainable = False)
   },
@@ -71,35 +71,3 @@ methods = {
     'algorithm': bootstrap(RandomForestClassifier, trainable = False)
   },
 }
-
-# DecisionTreeClassifier, RandomForestClassifier
-
-
-# def generateANN(hidden_layer_sizes, activation, alpha):
-# 	classifier = MLPClassifier(hidden_layer_sizes=hidden_layer_sizes,
-# 		activation=activation, alpha=alpha)
-# 	return classifier
-
-# def generateKNN(k):
-# 	classifier = KNeighborsClassifier(n_neighbors=k)
-# 	return classifier
-
-# def generateSVM(kernel, degree, C):
-# 	classifier = SVC(kernel=kernel, degree=degree, C=C)
-# 	return classifier
-
-# def generateDTree(criterion, max_depth, min_samples_split, min_samples_leaf):
-# 	classifier = DecisionTreeClassifier(criterion=criterion,
-# 		max_depth=max_depth, min_samples_split=min_samples_split,
-# 		min_samples_leaf=min_samples_leaf)
-# 	return classifier
-
-# def generateNB():
-# 	return GaussianNB()
-
-# def generateRandomForrest(n_estimators, criterion, max_depth, min_samples_split, min_samples_leaf):
-# 	classifier = RandomForestClassifier(n_estimators=n_estimators,
-# 		criterion=criterion, max_depth=max_depth,
-# 		min_samples_split=min_samples_split,
-# 		min_samples_leaf=min_samples_leaf)
-# 	return classifier
