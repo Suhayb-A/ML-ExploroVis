@@ -46,7 +46,7 @@ class Base extends React.Component<Props> {
   componentDidMount() {
     this.updateDimentions();
     const svg = d3.select(this.svgRef.current);
-    this.layers = LAYERS.map(_ => svg.append("g"));
+    this.layers = LAYERS.map(_ => svg.append("svg"));
     this.helpOverlayLayers = HELP_OVERLAYS.map(_ => svg.append("g"));
 
     if (!this.props.responsive) return;
@@ -131,6 +131,7 @@ class Base extends React.Component<Props> {
       scaleX: x,
       scaleY: y,
       thumbnail: this.props.thumbnail,
+      getColor: this.props.colorFor
     });
   }
 
@@ -140,6 +141,7 @@ class Base extends React.Component<Props> {
       scaleX: d3.ScaleLinear<number, number, never>,
       scaleY: d3.ScaleLinear<number, number, never>,
       thumbnail: boolean,
+      getColor: (any) => string
     }
   ) {
     this.layers.forEach((layer, idx) => {

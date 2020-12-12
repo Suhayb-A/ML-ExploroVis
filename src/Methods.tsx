@@ -119,20 +119,19 @@ function Methods(props: Props) {
   }, {});
 
   function colorFor(point) {
-    const color = colors[point[colorInfo._id]];
+    let value = point[colorInfo._id];
+    if (isFinite(point)) {
+      value = point;
+    }
+    const color = colors[value];
     if (color) {
       return color;
     }
-    return getColor(point[colorInfo._id]);
+    return getColor(value);
   }
 
   const frames = methods[selectedMethodIDX].frames;
   const lastFrameIdx = (frames || []).length - 1;
-  const hasBound = !(
-    !frames ||
-    !frames[lastFrameIdx] ||
-    !frames[lastFrameIdx].boundary
-  );
 
   let colorValues = colorInfo.values;
   if (!colorValues) {
@@ -184,13 +183,6 @@ function Methods(props: Props) {
                 {color.title}
               </div>
             ))}
-
-            {hasBound && (
-              <div className="legend-bound">
-                <div />
-                Boundary
-              </div>
-            )}
           </div>
         </div>
         <ScrollView

@@ -21,6 +21,9 @@ function App() {
   const [methodPath, setMethodPath] = useState("cluster/default");
 
   function colorFor(data) {
+    if (isFinite(data)) {
+      return getColor(data);
+    }
     return getColor(data['g']);
   }
 
