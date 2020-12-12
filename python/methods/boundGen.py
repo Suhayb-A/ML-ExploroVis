@@ -1,6 +1,6 @@
 import numpy as np
 
-GRID_STEP = 0.01;
+GRID_STEP = 0.02;
 OFFSET = 0.11
 
 def generate_boundary(model, X):

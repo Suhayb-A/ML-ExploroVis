@@ -24,6 +24,8 @@ export default function draw(
   function update(polygons: Polygons) {
     polygons
       .attr("d", (data: any) => data.path)
+      .attr("fill-opacity", 0.25)
+      .attr("stroke", (data: any) => getColor(data.value))
       .attr("fill", (data: any) => getColor(data.value));
   }
 
