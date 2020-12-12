@@ -17,7 +17,7 @@ export default function draw(
 ) {
   const searchRadius = (value.help || {}).searchRadius;
   const data =
-    !show || !searchRadius
+    !searchRadius
       ? []
       : value.scatter.map((d) => ({ ...d, searchRadius }));
   const points = svg.selectAll("ellipse").data(data);
