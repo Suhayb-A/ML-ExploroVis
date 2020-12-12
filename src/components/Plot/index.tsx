@@ -1,8 +1,9 @@
 import React, { createRef } from "react";
 import * as d3 from "d3";
 import Scatter from "./Scatter";
-import Boundary from './Boundary';
+import Boundary from "./Boundary";
 import HelpSearchRadius from "./HelpSearchRadius";
+import { interpolatePath } from 'd3-interpolate-path';
 
 export const PADDING = 15;
 export const THUMBNAIL_PADDING = 8;
@@ -10,7 +11,7 @@ export const COLORS = ["black", ...d3.schemeCategory10];
 
 export function getColor(index: number | string) {
   // Offest the index so that -1 would be black.
-  return COLORS[(Number(index)% d3.schemeCategory10.length) + 1 ];
+  return COLORS[(Number(index) % d3.schemeCategory10.length) + 1];
 }
 
 export interface Props {
@@ -22,18 +23,25 @@ export interface Props {
   helpOverlays: boolean;
 }
 
-const LAYERS = [Boundary, Scatter]
-const HELP_OVERLAYS = [HelpSearchRadius]
+const LAYERS = [Boundary, Scatter];
+const HELP_OVERLAYS = [HelpSearchRadius];
+
+const geoPath = d3.geoPath();
 
 class Base extends React.Component<Props> {
   protected svgRef: React.RefObject<SVGSVGElement>;
   protected xy_domains: [[number, number], [number, number]];
   protected layers: d3.Selection<d3.BaseType, unknown, HTMLElement, any>[] = [];
-  protected helpOverlayLayers: d3.Selection<d3.BaseType, unknown, HTMLElement, any>[] = [];
+  protected helpOverlayLayers: d3.Selection<
+    d3.BaseType,
+    unknown,
+    HTMLElement,
+    any
+  >[] = [];
 
   static defaultProps = {
     responsive: false,
-    helpOverlays: false
+    helpOverlays: false,
   };
 
   constructor(props: Props) {
@@ -46,8 +54,8 @@ class Base extends React.Component<Props> {
   componentDidMount() {
     this.updateDimentions();
     const svg = d3.select(this.svgRef.current);
-    this.layers = LAYERS.map(_ => svg.append("svg"));
-    this.helpOverlayLayers = HELP_OVERLAYS.map(_ => svg.append("g"));
+    this.layers = LAYERS.map((_) => svg.append("svg"));
+    this.helpOverlayLayers = HELP_OVERLAYS.map((_) => svg.append("g"));
 
     if (!this.props.responsive) return;
     window.addEventListener("resize", this.updateDimentions);
@@ -93,20 +101,82 @@ class Base extends React.Component<Props> {
     return frame;
   }
 
-  private getFrame(t?: number) {
-    // const colorOn = this.props.colorOn;
+  private mapBounds(
+    frame: any,
+    scaleX: d3.ScaleLinear<number, number, never>,
+    scaleY: d3.ScaleLinear<number, number, never>
+  ) {
+    if (frame.boundary) {
+      const data = frame.boundary;
+      const Contours = d3
+        .contours()
+        .size(data.dimensions)
+        .thresholds(d3.range(0, Number(d3.max(data.predictions)) + 1, 1));
+
+      const gridScaleX = d3
+        .scaleLinear()
+        .range(data.xRange)
+        .domain([0, data.dimensions[0]]);
+
+      const gridScaleY = d3
+        .scaleLinear()
+        .range(data.yRange)
+        .domain([0, data.dimensions[1]]);
+
+      const countors = Contours(data.predictions);
+
+      countors.forEach((countor) => {
+        countor.coordinates.forEach((coordinates) => {
+          coordinates.forEach((coordinates) => {
+            coordinates.forEach((point) => {
+              point[0] = scaleX(gridScaleX(point[0]));
+              point[1] = scaleY(gridScaleY(point[1]));
+            });
+          });
+        });
+      });
+
+      frame.boundaryCountors = countors.map((countor) => ({
+        path: geoPath(countor),
+        value: countor.value,
+      }));
+    }
+    return frame;
+  }
+
+  private getFrame(
+    t: number,
+    scaleX: d3.ScaleLinear<number, number, never>,
+    scaleY: d3.ScaleLinear<number, number, never>
+  ) {
     const frames = this.props.frames;
     if (t === undefined || t === null)
-      return this.setFrameColor(frames[frames.length - 1]);
+      return this.setFrameColor(
+        this.mapBounds(frames[frames.length - 1], scaleX, scaleY)
+      );
     const t0 = Math.floor(t);
 
-    if (!frames[t0 + 1]) return this.setFrameColor(frames[t0]);
+    if (!frames[t0 + 1])
+      return this.setFrameColor(this.mapBounds(frames[t0], scaleX, scaleY));
 
-    const interpolate = d3.interpolate(
-      this.setFrameColor(frames[t0]),
-      this.setFrameColor(frames[t0 + 1])
-    );
-    return interpolate(t - t0);
+    const frame0 = this.setFrameColor(this.mapBounds(frames[t0], scaleX, scaleY));
+    const frame1 = this.setFrameColor(this.mapBounds(frames[t0 + 1], scaleX, scaleY));
+    const interpolate = d3.interpolate(frame0, frame1);
+    const tDelta = t - t0;
+    const frame = interpolate(tDelta);
+
+    if (frame.boundaryCountors) {
+      const max = Math.max(frame1.boundaryCountors.length, frame0.boundaryCountors.length);
+      for (let index = 0; index < max; index++) {
+        if (frame.boundaryCountors[index]) {
+          const path0 = (frame0.boundaryCountors[index] || {}).path;
+          const path1 = (frame1.boundaryCountors[index] || {}).path;
+          frame.boundaryCountors[index].path = interpolatePath(path0, path1)(tDelta);
+        }
+      }
+    }
+
+    return frame;
   }
 
   private callDrawGraph() {
@@ -125,32 +195,30 @@ class Base extends React.Component<Props> {
         .range([padding, dims[idx] - padding])
     );
 
-    const frame = this.getFrame(this.props.t);
+    const frame = this.getFrame(this.props.t || 0, x, y);
     this.drawGraphs({
       value: frame,
       scaleX: x,
       scaleY: y,
       thumbnail: this.props.thumbnail,
-      getColor: this.props.colorFor
+      getColor: this.props.colorFor,
     });
   }
 
-  private drawGraphs(
-    props: {
-      value: any,
-      scaleX: d3.ScaleLinear<number, number, never>,
-      scaleY: d3.ScaleLinear<number, number, never>,
-      thumbnail: boolean,
-      getColor: (any) => string
-    }
-  ) {
+  private drawGraphs(props: {
+    value: any;
+    scaleX: d3.ScaleLinear<number, number, never>;
+    scaleY: d3.ScaleLinear<number, number, never>;
+    thumbnail: boolean;
+    getColor: (any) => string;
+  }) {
     this.layers.forEach((layer, idx) => {
-      LAYERS[idx](layer, props)
-    })
+      LAYERS[idx](layer, props);
+    });
 
     this.helpOverlayLayers.forEach((layer, idx) => {
-      HELP_OVERLAYS[idx](layer, props, this.props.helpOverlays)
-    })
+      HELP_OVERLAYS[idx](layer, props, this.props.helpOverlays);
+    });
   }
 
   render() {

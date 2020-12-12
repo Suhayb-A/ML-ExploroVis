@@ -119,9 +119,11 @@ function Methods(props: Props) {
   }, {});
 
   function colorFor(point) {
-    let value = point[colorInfo._id];
+    let value;
     if (isFinite(point)) {
       value = point;
+    } else {
+      value = point[colorInfo._id]
     }
     const color = colors[value];
     if (color) {
