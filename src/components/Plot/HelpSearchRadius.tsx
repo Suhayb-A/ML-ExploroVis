@@ -22,7 +22,7 @@ export default function draw(
       : value.scatter.map((d) => ({ ...d, searchRadius }));
   const points = svg.selectAll("ellipse").data(data);
 
-  svg.attr('opacity', 0.2);
+  svg.attr('opacity', 0.15);
 
   type Points = typeof points;
   function update(points: Points) {
