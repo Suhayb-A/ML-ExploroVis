@@ -56,7 +56,6 @@ export default function draw(
     polygons
       .attr("d", (data) => geoPath(data))
       .attr("fill", (data) => getColor(data.value))
-      // .attr("fill-opacity", 0.4);
   }
 
   update(polygons.enter().append("path"));
