@@ -54,8 +54,8 @@ default markdown files will be used.
 
 1. Install [Node.js](https://nodejs.org/en/).
 2. Install [Yarn](https://classic.yarnpkg.com/en/docs/install/).
-3. Install python dependencies located at ```./requirements.txt```.
-4. Install JavaScript's ```yarn install```.
+3. Install pPthon dependencies located at ```./requirements.txt```.
+4. Install JavaScript dependencies:  ```yarn install```.
 5. Start the application by calling:
 
 ```sh
