@@ -195,7 +195,7 @@ class Base extends React.Component<Props> {
         .range([padding, dims[idx] - padding])
     );
 
-    const frame = this.getFrame(this.props.t || 0, x, y);
+    const frame = this.getFrame(this.props.t, x, y);
     this.drawGraphs({
       value: frame,
       scaleX: x,

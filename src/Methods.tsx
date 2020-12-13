@@ -121,7 +121,7 @@ function Methods(props: Props) {
   function colorFor(point) {
     let value;
     if (isFinite(point)) {
-      value = point;
+      return getColor(point);
     } else {
       value = point[colorInfo._id]
     }
