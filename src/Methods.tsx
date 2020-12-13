@@ -144,7 +144,7 @@ function Methods(props: Props) {
         new Set(frames[lastFrameIdx].scatter.map((p) => p[colorInfo._id]))
       ).sort((a: any, b: any) => a - b);
       colorValues = values.map((v, i) => ({
-        title: v === -1 ? "Not Clustered" : `Cluster ${i + 1}`,
+        title: v === -1 ? "Not Clustered" : `Cluster ${v as any + 1}`,
         value: v as any,
         color: getColor(v as any),
       })) as any;
