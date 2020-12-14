@@ -104,7 +104,7 @@ function DataSetEditor({ close, onAdd, colorFor }: Props) {
         <DrawPlot colorFor={colorFor} data={state.data} addDataPoints={addDataPoints} />
       </div>
       <div className="caption">
-        Select a cluster color from the right, then draw on the right.
+        Select a cluster color from the top left, then draw points on the right.
       </div>
       <div className="model-editor-buttons">
         <div onClick={close}>Cancel</div>
