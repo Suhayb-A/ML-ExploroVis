@@ -1,4 +1,4 @@
-# ML ExporoVis
+# ML ExploroVis
 
 A Machine Learning Exploration Application.
 
