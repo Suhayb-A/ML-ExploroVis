@@ -31,7 +31,7 @@ method_id : {
 methods = {
   'DBSCAN': {
     'title': 'DBSCAN',
-    'parameters': [inputs.Range('eps', 'Search Radius', 0.09, 0.05, 0.5, step = 0.01),
+    'parameters': [inputs.Range('eps', 'Search Radius', 0.09, 0.05, 0.3, step = 0.01),
     inputs.Range('min_samples', 'Minimum Number of Samples', 5, 1, 25)],
     'algorithm': DBSCAN_HELP(bootstrap(DBSCAN, trainable=False)),
   },

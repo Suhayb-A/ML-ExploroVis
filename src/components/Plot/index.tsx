@@ -111,6 +111,7 @@ class Base extends React.Component<Props> {
       const Contours = d3
         .contours()
         .size(data.dimensions)
+        .smooth(false)
         .thresholds(d3.range(0, Number(d3.max(data.predictions)) + 1, 1));
 
       const gridScaleX = d3
